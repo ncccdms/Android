@@ -5,4 +5,5 @@ plugins {
 
     alias(libs.plugins.hiltAndroid) apply false
     alias(libs.plugins.jetbrains.kotlin.kapt) apply false
+    alias(libs.plugins.google.services) apply false
 }
