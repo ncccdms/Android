@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "78910688912",
+    "project_id": "todo-list-kominfo",
+    "storage_bucket": "todo-list-kominfo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78910688912:android:ff2ca08c6b4b8ec15d5215",
+        "android_client_info": {
+          "package_name": "com.ncccdms.todolistbagian3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDf-pfdkDUm4fXMxaq1YDC-gn6rmNg5bJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
