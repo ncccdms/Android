@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Todolist Bagian3</string>
+    <string name="app_name">Todo-List Bagian 3</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_list">List</string>
+    <string name="title_home">Your Progress Schedule</string>
+    <string name="title_copyright">©2024 Diskominfo</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel semper lorem. Maecenas sit amet risus non neque ornare maximus. Mauris et suscipit enim, sed vehicula massa.</string>
+    <string name="title_getStarted">Get things done with TODO</string>
+    <string name="title_diskominfo">DISKOMINFO\nKABUPATEN CILACAP</string>
 </resources>
