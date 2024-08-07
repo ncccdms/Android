@@ -13,6 +13,7 @@ googlesServices = "4.4.2"
 firebase_bom = "32.2.1"
 firebase_auth = "23.0.0"
 splash_screen = "1.0.1"
+androidx-navigation = "2.7.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +38,8 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase_auth"}
 
 splash-screen = {group = "androidx.core", name = "core-splashscreen", version.ref = "splash_screen"}
+
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

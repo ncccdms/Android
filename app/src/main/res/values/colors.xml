@@ -4,9 +4,7 @@
     <color name="blue_400">#183BB7</color>
     <color name="blue_200">#3968CF</color>
     <color name="blue_100">#7FB1FB</color>
-    <color name="blue_0">#4099ED</color>
-    <color name="red_0">#4099ED</color>
-    <color name="green_0">#4099ED</color>
+    <color name="blue_10">#4099ED</color>
     <color name="gray_200">#D9D9D9</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
