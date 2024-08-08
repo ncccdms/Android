@@ -1,19 +1,23 @@
 package com.ncccdms.todolistbagian3.ui
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.navigation.NavHostController
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.ncccdms.todolistbagian3.components.LockScreenOrientation
+import com.ncccdms.todolistbagian3.core.Utils.Companion.getIsSplashScreenShown
 import com.ncccdms.todolistbagian3.nav.NavGraph
-import com.ncccdms.todolistbagian3.nav.Screen.SignInScreen
-import com.ncccdms.todolistbagian3.nav.Screen.ProfileScreen
-import com.ncccdms.todolistbagian3.nav.Screen.VerifyEmailScreen
 import com.ncccdms.todolistbagian3.nav.Screen.MenuScreen
+import com.ncccdms.todolistbagian3.nav.Screen.ProfileScreen
+import com.ncccdms.todolistbagian3.nav.Screen.SplashScreen
+import com.ncccdms.todolistbagian3.nav.Screen.VerifyEmailScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,10 +29,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             navController = rememberNavController()
+
+            val isSplashScreenShown = remember { getIsSplashScreenShown(this) }
+            val startDestination = if (isSplashScreenShown) MenuScreen.route else SplashScreen.route
+
             NavGraph(
-                navController = navController
+                navController = navController,
+                startDestination = startDestination
             )
+
             AuthState()
         }
     }
@@ -48,14 +59,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun NavigateToMenuScreen() = navController.navigate(MenuScreen.route) {
-        popUpTo(navController.graph.id) {
-            inclusive = true
-        }
-    }
-
-    @Composable
-    private fun NavigateToSignInScreen() = navController.navigate(SignInScreen.route) {
+    private fun NavigateToMenuScreen() = navController.navigate(SplashScreen.route) {
         popUpTo(navController.graph.id) {
             inclusive = true
         }
@@ -74,4 +78,5 @@ class MainActivity : ComponentActivity() {
             inclusive = true
         }
     }
+
 }
