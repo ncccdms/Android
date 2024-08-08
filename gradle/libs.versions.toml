@@ -9,11 +9,13 @@ lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.04.01"
 hiltVersion = "2.47"
+hilt_navigation_compose_version = '1.1.0-alpha01'
 googlesServices = "4.4.2"
 firebase_bom = "32.2.1"
 firebase_auth = "23.0.0"
 splash_screen = "1.0.1"
 androidx-navigation = "2.7.7"
+compose-material-ext = "1.6.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,9 +32,11 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material-ext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-material-ext" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android" , version.ref = "hiltVersion"}
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler" , version.ref = "hiltVersion"}
+hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose" , version.ref = "hilt_navigation_compose_version"}
 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase_bom"}
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase_auth"}

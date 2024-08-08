@@ -5,6 +5,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ncccdms.todolistbagian3.nav.Screen.*
+import com.ncccdms.todolistbagian3.ui.screen.menu.MenuScreen
+import com.ncccdms.todolistbagian3.ui.screen.sign_in.SignInScreen
 
 @Composable
 @ExperimentalComposeUiApi
@@ -13,55 +16,32 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.SignInScreen.route
+        startDestination = MenuScreen.route
     ) {
         composable(
-            route = Screen.SignInScreen.route
+            route = MenuScreen.route
+        ) {
+            MenuScreen(
+                navToSignInScreen = {
+                    navController.navigate(SignInScreen.route)
+                },
+                navToSignUpScreen = {
+                    navController.navigate(SignUpScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = SignInScreen.route
         ) {
             SignInScreen(
                 navigateToForgotPasswordScreen = {
-                    navController.navigate(Screen.ForgotPasswordScreen.route)
+                    navController.navigate(ForgotPasswordScreen.route)
                 },
                 navigateToSignUpScreen = {
-                    navController.navigate(Screen.SignUpScreen.route)
+                    navController.navigate(SignUpScreen.route)
                 }
             )
-        }
-        composable(
-            route = Screen.ForgotPasswordScreen.route
-        ) {
-            ForgotPasswordScreen(
-                navigateBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-        composable(
-            route = Screen.SignUpScreen.route
-        ) {
-            SignUpScreen(
-                navigateBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-        composable(
-            route = Screen.VerifyEmailScreen.route
-        ) {
-            VerifyEmailScreen(
-                navigateToProfileScreen = {
-                    navController.navigate(ProfileScreen.route) {
-                        popUpTo(navController.graph.id) {
-                            inclusive = true
-                        }
-                    }
-                }
-            )
-        }
-        composable(
-            route = Screen.ProfileScreen.route
-        ) {
-            ProfileScreen()
         }
     }
 }

@@ -13,7 +13,10 @@ import com.ncccdms.todolistbagian3.nav.NavGraph
 import com.ncccdms.todolistbagian3.nav.Screen.SignInScreen
 import com.ncccdms.todolistbagian3.nav.Screen.ProfileScreen
 import com.ncccdms.todolistbagian3.nav.Screen.VerifyEmailScreen
+import com.ncccdms.todolistbagian3.nav.Screen.MenuScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 @OptIn(ExperimentalComposeUiApi::class)
 class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
@@ -34,13 +37,20 @@ class MainActivity : ComponentActivity() {
     private fun AuthState() {
         val isUserSignedOut = viewModel.getAuthState().collectAsState().value
         if (isUserSignedOut) {
-            NavigateToSignInScreen()
+            NavigateToMenuScreen()
         } else {
             if (viewModel.isEmailVerified) {
                 NavigateToProfileScreen()
             } else {
                 NavigateToVerifyEmailScreen()
             }
+        }
+    }
+
+    @Composable
+    private fun NavigateToMenuScreen() = navController.navigate(MenuScreen.route) {
+        popUpTo(navController.graph.id) {
+            inclusive = true
         }
     }
 

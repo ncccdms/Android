@@ -2,11 +2,9 @@ package com.ncccdms.todolistbagian3.data
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
-import com.google.firebase.auth.FirebaseUser
 import com.ncccdms.todolistbagian3.domain.model.Response.Success
 import com.ncccdms.todolistbagian3.domain.model.Response.Failure
 import com.ncccdms.todolistbagian3.domain.repository.AuthRepository
-import com.ncccdms.todolistbagian3.domain.repository.AuthStateResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,8 +18,7 @@ import javax.inject.Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth
 ) : AuthRepository {
-    override val currentUser: FirebaseUser?
-        get() = auth.currentUser
+    override val currentUser get() = auth.currentUser
 
     override suspend fun signUp(email: String, password: String) = try {
         auth.createUserWithEmailAndPassword(email, password).await()

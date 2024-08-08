@@ -52,6 +52,9 @@ android {
     }
 }
 
+apply(plugin = "dagger.hilt.android.plugin")
+
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -62,9 +65,11 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.ext)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
