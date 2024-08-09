@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
     private fun AuthState() {
         val isUserSignedOut = viewModel.getAuthState().collectAsState().value
         if (isUserSignedOut) {
-            NavigateToMenuScreen()
+            NavigateToSplashScreen()
         } else {
             if (viewModel.isEmailVerified) {
                 NavigateToProfileScreen()
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun NavigateToMenuScreen() = navController.navigate(SplashScreen.route) {
+    private fun NavigateToSplashScreen() = navController.navigate(SplashScreen.route) {
         popUpTo(navController.graph.id) {
             inclusive = true
         }

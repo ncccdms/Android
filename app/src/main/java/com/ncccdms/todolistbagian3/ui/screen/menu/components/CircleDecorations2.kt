@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.ncccdms.todolistbagian3.R
 
 @Composable
-fun CircleDecorations() {
+fun CircleDecorations2() {
     val transition = rememberInfiniteTransition(label = "")
     val scale by transition.animateFloat(
         initialValue = 1f,
@@ -34,13 +34,13 @@ fun CircleDecorations() {
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawCircle(
             color = colorBlue200,
-            radius = 100.dp.toPx() * scale,
-            center = Offset(size.width - 2.dp.toPx(), size.height - 6.dp.toPx())
+            radius = 130.dp.toPx() * scale,
+            center = Offset(size.width - 350.dp.toPx(), 10.dp.toPx())
         )
         drawCircle(
             color = colorBlue100,
-            radius = 60.dp.toPx() * scale,
-            center = Offset(size.width - 35.dp.toPx(), size.height - 1.dp.toPx())
+            radius = 80.dp.toPx() * scale,
+            center = Offset(size.width - 380.dp.toPx(), 40.dp.toPx())
         )
     }
 }

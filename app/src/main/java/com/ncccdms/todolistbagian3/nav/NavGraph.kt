@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.ncccdms.todolistbagian3.nav.Screen.*
 import com.ncccdms.todolistbagian3.ui.screen.menu.MenuScreen
 import com.ncccdms.todolistbagian3.ui.screen.sign_in.SignInScreen
+import com.ncccdms.todolistbagian3.ui.screen.sign_up.SignUpScreen
 import com.ncccdms.todolistbagian3.ui.screen.splash.SplashScreen
 
 @Composable
@@ -46,6 +47,16 @@ fun NavGraph(
                 },
                 navigateToSignUpScreen = {
                     navController.navigate(SignUpScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = SignUpScreen.route
+        ) {
+            SignUpScreen(
+                navigateToSignInScreen = {
+                    navController.navigate(SignInScreen.route)
                 }
             )
         }

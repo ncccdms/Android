@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.R
 import com.ncccdms.todolistbagian3.ui.screen.menu.components.CircleDecorations
+import com.ncccdms.todolistbagian3.ui.screen.menu.components.CircleDecorations2
 import com.ncccdms.todolistbagian3.ui.screen.menu.components.LogoSection
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 import com.ncccdms.todolistbagian3.ui.theme.poppBold
@@ -50,6 +51,7 @@ fun MenuScreen(
 ){
     Box(modifier = Modifier.fillMaxSize()) {
         CircleDecorations()
+        CircleDecorations2()
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,7 +60,7 @@ fun MenuScreen(
             verticalArrangement = Arrangement.Center
         ) {
             LogoSection()
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(45.dp))
             val colorBlue400 = colorResource(id = R.color.blue_400)
             Text(
                 text = stringResource(id = R.string.title_getStarted),
@@ -77,7 +79,7 @@ fun MenuScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp)
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Button(
                 onClick = navToSignInScreen ,
                 shape = RoundedCornerShape(8.dp), // Sudut melengkung,
@@ -85,6 +87,7 @@ fun MenuScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp)
+                    .height(50.dp)
             ) {
                 Text(text = "Sign In",fontSize = 18.sp,fontFamily = poppBold)
             }
@@ -96,6 +99,7 @@ fun MenuScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp)
+                    .height(50.dp)
             ) {
                 Text(text = "Sign Up",fontSize = 18.sp,fontFamily = poppBold)
             }

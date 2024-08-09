@@ -34,7 +34,6 @@ object Constant {
     const val FORGOT_PASSWORD = "Forgot password?"
     const val NO_ACCOUNT = "No account? Sign up."
     const val ALREADY_USER = "Already a user? Sign in."
-    const val WELCOME_MESSAGE = "Welcome to our app."
     const val ALREADY_VERIFIED = "Already verified?"
     const val SPAM_EMAIL = "If not, please also check the spam folder."
 

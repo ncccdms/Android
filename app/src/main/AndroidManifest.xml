@@ -9,6 +9,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MySplashscreen"
         tools:targetApi="31">
@@ -16,7 +17,7 @@
             android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MySplashscreen">
+            android:theme="@style/Theme.SplashScreenJetPackCompose">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN" />
 

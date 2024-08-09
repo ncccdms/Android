@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.screen.sign_in.components
+package com.ncccdms.todolistbagian3.ui.screen.sign_up.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,11 +37,9 @@ import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.R
 import com.ncccdms.todolistbagian3.components.EmailField
 import com.ncccdms.todolistbagian3.components.PasswordField
+import com.ncccdms.todolistbagian3.core.Constant.ALREADY_USER
 import com.ncccdms.todolistbagian3.core.Constant.EMPTY_STRING
-import com.ncccdms.todolistbagian3.core.Constant.FORGOT_PASSWORD
-import com.ncccdms.todolistbagian3.core.Constant.NO_ACCOUNT
-import com.ncccdms.todolistbagian3.core.Constant.SIGN_IN_BUTTON
-import com.ncccdms.todolistbagian3.core.Constant.VERTICAL_DIVIDER
+import com.ncccdms.todolistbagian3.core.Constant.SIGN_UP_BUTTON
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
 import com.ncccdms.todolistbagian3.ui.theme.Gray10
 import com.ncccdms.todolistbagian3.ui.theme.poppMedium
@@ -50,11 +47,10 @@ import com.ncccdms.todolistbagian3.ui.theme.poppSemiBold
 
 @Composable
 @ExperimentalComposeUiApi
-fun SignInContent(
+fun SignUpContent(
     padding: PaddingValues,
-    signIn: (email: String, password: String) -> Unit,
-    navigateToForgotPasswordScreen: () -> Unit,
-    navigateToSignUpScreen: () -> Unit,
+    signUp: (email: String, password: String) -> Unit,
+    navigateToSignInScreen: () -> Unit
 ) {
     var email by rememberSaveable(
         stateSaver = TextFieldValue.Saver,
@@ -117,7 +113,7 @@ fun SignInContent(
             Button(
                 onClick = {
                     keyboard?.hide()
-                    signIn(email.text, password.text)
+                    signUp(email.text, password.text)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_200)),
                 shape = RoundedCornerShape(8.dp), // Sudut melengkung,
@@ -125,37 +121,18 @@ fun SignInContent(
                     .fillMaxWidth()
                     .padding(horizontal = 40.dp)
             ) {
-                Text(SIGN_IN_BUTTON, fontSize = 16.sp, fontFamily = poppSemiBold)
+                Text(SIGN_UP_BUTTON, fontSize = 16.sp, fontFamily = poppSemiBold)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Row{
-                Text(
-                    modifier = Modifier.clickable {
-                        navigateToForgotPasswordScreen()
-                    },
-                    fontFamily = poppMedium,
-                    text = FORGOT_PASSWORD,
-                    color = Blue40,
-                    fontSize = 13.sp
-                )
-                Text(
-                    modifier = Modifier.padding(start = 4.dp, end = 4.dp),
-                    text = VERTICAL_DIVIDER,
-                    fontSize = 13.sp,
-                    fontFamily = poppMedium,
-                    color = Blue40,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    modifier = Modifier.clickable {
-                        navigateToSignUpScreen()
-                    },
-                    fontFamily = poppMedium,
-                    text = NO_ACCOUNT,
-                    color = Blue40,
-                    fontSize = 13.sp
-                )
-            }
+            Text(
+                modifier = Modifier.clickable {
+                    navigateToSignInScreen()
+                },
+                fontFamily = poppMedium,
+                text = ALREADY_USER,
+                color = Blue40,
+                fontSize = 13.sp
+            )
         }
     }
 }

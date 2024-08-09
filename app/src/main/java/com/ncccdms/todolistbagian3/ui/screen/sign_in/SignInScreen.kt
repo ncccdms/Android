@@ -6,8 +6,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ncccdms.todolistbagian3.core.Utils.Companion.showMessage
+import com.ncccdms.todolistbagian3.ui.screen.menu.components.CircleDecorations
 import com.ncccdms.todolistbagian3.ui.screen.sign_in.components.SignIn
-import com.ncccdms.todolistbagian3.ui.screen.sign_in.components.SignInTopBar
 import com.ncccdms.todolistbagian3.ui.screen.sign_in.components.SignInContent
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -20,9 +20,6 @@ fun SignInScreen(
     val context = LocalContext.current
 
     Scaffold(
-        topBar = {
-            SignInTopBar()
-        },
         content = { padding ->
             SignInContent(
                 padding = padding,
@@ -30,8 +27,9 @@ fun SignInScreen(
                     viewModel.signInWithEmailAndPassword(email, password)
                 },
                 navigateToForgotPasswordScreen = navigateToForgotPasswordScreen,
-                navigateToSignUpScreen = navigateToSignUpScreen
+                navigateToSignUpScreen = navigateToSignUpScreen,
             )
+            CircleDecorations()
         }
     )
 
