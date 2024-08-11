@@ -14,8 +14,8 @@ import androidx.navigation.compose.rememberNavController
 import com.ncccdms.todolistbagian3.components.LockScreenOrientation
 import com.ncccdms.todolistbagian3.core.Utils.Companion.getIsSplashScreenShown
 import com.ncccdms.todolistbagian3.nav.NavGraph
+import com.ncccdms.todolistbagian3.nav.Screen
 import com.ncccdms.todolistbagian3.nav.Screen.MenuScreen
-import com.ncccdms.todolistbagian3.nav.Screen.ProfileScreen
 import com.ncccdms.todolistbagian3.nav.Screen.SplashScreen
 import com.ncccdms.todolistbagian3.nav.Screen.VerifyEmailScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
             NavigateToSplashScreen()
         } else {
             if (viewModel.isEmailVerified) {
-                NavigateToProfileScreen()
+                NavigateToHomeScreen()
             } else {
                 NavigateToVerifyEmailScreen()
             }
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun NavigateToProfileScreen() = navController.navigate(ProfileScreen.route) {
+    private fun NavigateToHomeScreen() = navController.navigate(Screen.HomeScreen.route) {
         popUpTo(navController.graph.id) {
             inclusive = true
         }

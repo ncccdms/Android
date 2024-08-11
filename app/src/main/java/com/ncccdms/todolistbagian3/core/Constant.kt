@@ -20,7 +20,10 @@ object Constant {
     const val FORGOT_PASSWORD_SCREEN = "Forgot password"
     const val SIGN_UP_SCREEN = "Sign up"
     const val VERIFY_EMAIL_SCREEN = "Verify email"
-    const val PROFILE_SCREEN = "Profile"
+    const val HOME_SCREEN = "Home"
+    const val MAIN_SCREEN = "Main"
+    const val LIST_SCREEN = "List"
+    const val DETAIL_SCREEN = "Detail List"
 
     //Labels
     const val EMAIL_LABEL = "Email"

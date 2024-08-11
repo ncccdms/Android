@@ -10,6 +10,8 @@ import com.ncccdms.todolistbagian3.ui.screen.menu.MenuScreen
 import com.ncccdms.todolistbagian3.ui.screen.sign_in.SignInScreen
 import com.ncccdms.todolistbagian3.ui.screen.sign_up.SignUpScreen
 import com.ncccdms.todolistbagian3.ui.screen.splash.SplashScreen
+import com.ncccdms.todolistbagian3.ui.screen.verify_email.VerifyEmailScreen
+import com.ncccdms.todolistbagian3.ui.screen.home.HomeScreen
 
 @Composable
 @ExperimentalComposeUiApi
@@ -59,6 +61,26 @@ fun NavGraph(
                     navController.navigate(SignInScreen.route)
                 }
             )
+        }
+
+        composable(
+            route = VerifyEmailScreen.route
+        ) {
+            VerifyEmailScreen(
+                navigateToProfileScreen = {
+                    navController.navigate(HomeScreen.route) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
+        composable(
+            route = HomeScreen.route
+        ) {
+            HomeScreen()
         }
     }
 }

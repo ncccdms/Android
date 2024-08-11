@@ -30,5 +30,5 @@ interface AuthRepository {
 
     fun getAuthState(viewModelScope: CoroutineScope):AuthStateResponse
 
-    suspend fun signOut()
+    fun signOut()
 }
