@@ -21,7 +21,7 @@ sealed class Screen(val route:String) {
     object HomeScreen: Screen(HOME_SCREEN)
     object MainScreen: Screen(MAIN_SCREEN)
     object ListScreen: Screen(LIST_SCREEN)
-    object DetailListScreen: Screen(DETAIL_SCREEN){
+    object DetailListScreen : Screen(DETAIL_SCREEN) {
         fun createRoute(listId: Int) = "detail/$listId"
     }
 }

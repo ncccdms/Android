@@ -18,7 +18,7 @@ import com.ncccdms.todolistbagian3.ui.screen.verify_email.components.VerifyEmail
 @Composable
 fun VerifyEmailScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToProfileScreen: () -> Unit
+    navigateToHomeScreen: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -39,7 +39,7 @@ fun VerifyEmailScreen(
     ReloadUser(
         navigateToProfileScreen = {
             if (viewModel.isEmailVerified) {
-                navigateToProfileScreen()
+                navigateToHomeScreen()
             } else {
                 showMessage(context, EMAIL_NOT_VERIFIED_MESSAGE)
             }

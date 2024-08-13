@@ -32,12 +32,9 @@ class MainActivity : ComponentActivity() {
             LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             navController = rememberNavController()
 
-            val isSplashScreenShown = remember { getIsSplashScreenShown(this) }
-            val startDestination = if (isSplashScreenShown) MenuScreen.route else SplashScreen.route
-
             NavGraph(
                 navController = navController,
-                startDestination = startDestination
+                startDestination = SplashScreen.route
             )
 
             AuthState()
@@ -47,13 +44,21 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AuthState() {
         val isUserSignedOut = viewModel.getAuthState().collectAsState().value
-        if (isUserSignedOut) {
+        val isSplashScreenShown = remember { getIsSplashScreenShown(this@MainActivity) }
+
+        if (!isSplashScreenShown) {
+            // Show the splash screen if it hasn't been shown
             NavigateToSplashScreen()
         } else {
-            if (viewModel.isEmailVerified) {
-                NavigateToHomeScreen()
+            // Handle the navigation based on auth state
+            if (isUserSignedOut) {
+                NavigateToSplashScreen()
             } else {
-                NavigateToVerifyEmailScreen()
+                if (viewModel.isEmailVerified) {
+                    NavigateToHomeScreen()
+                } else {
+                    NavigateToVerifyEmailScreen()
+                }
             }
         }
     }

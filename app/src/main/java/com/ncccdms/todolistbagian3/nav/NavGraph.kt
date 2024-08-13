@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ncccdms.todolistbagian3.nav.Screen.*
+import com.ncccdms.todolistbagian3.ui.forgot_password.ForgotPasswordScreen
 import com.ncccdms.todolistbagian3.ui.screen.menu.MenuScreen
 import com.ncccdms.todolistbagian3.ui.screen.sign_in.SignInScreen
 import com.ncccdms.todolistbagian3.ui.screen.sign_up.SignUpScreen
@@ -25,9 +26,7 @@ fun NavGraph(
     ) {
         composable(route = SplashScreen.route) {
             SplashScreen {
-                navController.navigate(MenuScreen.route) {
-                    popUpTo(SplashScreen.route) { inclusive = true }
-                }
+                navController.navigate(MenuScreen.route)
             }
         }
 
@@ -54,6 +53,16 @@ fun NavGraph(
         }
 
         composable(
+            route = ForgotPasswordScreen.route
+        ) {
+            ForgotPasswordScreen(
+                navigateBack = {
+                    navController.navigate(SignInScreen.route)
+                }
+            )
+        }
+
+        composable(
             route = SignUpScreen.route
         ) {
             SignUpScreen(
@@ -67,12 +76,8 @@ fun NavGraph(
             route = VerifyEmailScreen.route
         ) {
             VerifyEmailScreen(
-                navigateToProfileScreen = {
-                    navController.navigate(HomeScreen.route) {
-                        popUpTo(navController.graph.id) {
-                            inclusive = true
-                        }
-                    }
+                navigateToHomeScreen = {
+                    navController.navigate(HomeScreen.route)
                 }
             )
         }
@@ -82,5 +87,6 @@ fun NavGraph(
         ) {
             HomeScreen()
         }
+
     }
 }

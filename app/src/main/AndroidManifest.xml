@@ -17,7 +17,7 @@
             android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.SplashScreenJetPackCompose">
+            android:theme="@style/Theme.MySplashscreen">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN" />
 

@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +24,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.R
+import com.ncccdms.todolistbagian3.core.Utils.Companion.sortTasksByDeadline
+import com.ncccdms.todolistbagian3.data.dummy.Task
+import com.ncccdms.todolistbagian3.data.dummy.TaskData
+import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
+import com.ncccdms.todolistbagian3.ui.screen.main.components.NearlyDeadlineSection
+import com.ncccdms.todolistbagian3.ui.screen.main.components.NextDeadlineSection
+import com.ncccdms.todolistbagian3.ui.screen.main.components.TaskCardNearlyDeadline
+import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 import com.ncccdms.todolistbagian3.ui.theme.poppBold
 
@@ -33,192 +42,19 @@ fun MainScreen(
 ) {
     // Create a scroll state
     val scrollState = rememberScrollState()
+    val sortedTasks = remember { sortTasksByDeadline(TaskData.dummytask) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState) // Enable vertical scrolling
     ) {
-        NearlyDeadlineSection()
-        NextDeadlineSection()
+        NearlyDeadlineSection(sortedTasks.take(1)) // Display the first task as "Nearly Deadline"
+        NextDeadlineSection(sortedTasks.drop(1).take(3)) // Display the next three tasks as "Next Deadline"
     }
 }
 
-@Composable
-fun NearlyDeadlineSection() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp, 16.dp, 16.dp, 0.dp)
-    ) {
-        Text(
-            text = "Nearly Deadline",
-            color = colorResource(id = R.color.blue_600),
-            fontFamily = poppBlack,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
-        TaskCardNearlyDeadline(
-            title = "Membuat surat undangan sosialisasi metadata statistik",
-            deadline = "Today",
-            status = "Proses Koordinasi dengan Mas Adho (PT. PITSI)",
-            isFinished = true
-        )
-    }
-}
 
-@Composable
-fun TaskCardNearlyDeadline(title: String, deadline: String, status: String, isFinished: Boolean) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clip(RoundedCornerShape(12.dp)) // Optional: for rounded corners
-    ) {
-        // Title section with red background
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Red)
-                .padding(16.dp)
-        ) {
-            Text(
-                text = title,
-                fontFamily = poppBlack,
-                fontSize = 16.sp,
-                color = Color.White
-            )
-        }
 
-        // Deadline and Status section with white background
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(16.dp)
-        ) {
-            Column {
-                Text(
-                    text = "Deadline: $deadline",
-                    fontFamily = poppBlack,
-                    fontSize = 18.sp,
-                    color = colorResource(id = R.color.blue_600)
-                )
-                Text(
-                    text = "Status: $status",
-                    color = Color.Gray,
-                    fontFamily = poppBold,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
-        }
 
-        if (isFinished) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Green)
-                    .clickable {
-                        // Action to perform on click
-                    }
-                    .padding(16.dp), // Padding after clickable to ensure full area is clickable
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = "Finish",
-                    color = Color.White,
-                    fontFamily = poppBlack
-                )
-            }
-        }
 
-    }
-}
-
-@Composable
-fun NextDeadlineSection() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-
-        Text(
-            text = "Next Deadline",
-            color = colorResource(id = R.color.blue_600),
-            fontFamily = poppBlack,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
-        TaskCardNextDeadline(
-            title = "Membuat surat undangan sosialisasi metadata statistik",
-            deadline = "Today",
-            isFinished = true
-        )
-        TaskCardNextDeadline(
-            title = "Membuat surat undangan sosialisasi metadata statistik",
-            deadline = "Today",
-            isFinished = true
-        )
-        TaskCardNextDeadline(
-            title = "Membuat surat undangan sosialisasi metadata statistik",
-            deadline = "Today",
-            isFinished = true
-        )
-    }
-}
-
-@Composable
-fun TaskCardNextDeadline(title: String, deadline: String, isFinished: Boolean) {
-    Row(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .clip(RoundedCornerShape(12.dp)) // Apply rounded corners to the entire card
-            .background(Color.White)
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(12.dp)
-        ) {
-            Text(
-                text = deadline,
-                fontFamily = poppBlack,
-                fontSize = 16.sp,
-                color = colorResource(id = R.color.blue_600)
-            )
-            Text(
-                text = title,
-                fontFamily = poppBold,
-                fontSize = 16.sp,
-                color = Color.DarkGray,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
-
-        if (isFinished) {
-            Box(
-                modifier = Modifier
-                    .background(Color.Green)
-                    .clickable {
-                        // Handle click event
-                    }
-                    .padding(horizontal = 8.dp, vertical = 38.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Finish",
-                    color = Color.White,
-                    fontFamily = poppBlack,
-                    modifier = Modifier.rotate(90f)
-                )
-            }
-        }
-    }
-}

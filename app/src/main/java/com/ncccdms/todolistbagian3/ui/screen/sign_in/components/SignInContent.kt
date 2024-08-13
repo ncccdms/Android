@@ -16,10 +16,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +45,8 @@ import com.ncccdms.todolistbagian3.core.Constant.FORGOT_PASSWORD
 import com.ncccdms.todolistbagian3.core.Constant.NO_ACCOUNT
 import com.ncccdms.todolistbagian3.core.Constant.SIGN_IN_BUTTON
 import com.ncccdms.todolistbagian3.core.Constant.VERTICAL_DIVIDER
+import com.ncccdms.todolistbagian3.core.Utils.Companion.validateEmail
+import com.ncccdms.todolistbagian3.core.Utils.Companion.validatePassword
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
 import com.ncccdms.todolistbagian3.ui.theme.Gray10
 import com.ncccdms.todolistbagian3.ui.theme.poppMedium
@@ -76,7 +80,26 @@ fun SignInContent(
             )
         }
     )
+
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+    var emailErrorMessage by remember { mutableStateOf("") }
+    var passwordErrorMessage by remember { mutableStateOf("") }
+
+    fun handleLogin() {
+        emailError = !validateEmail(email.text)
+        emailErrorMessage = if (emailError) "Email harus mengandung simbol @" else ""
+
+        passwordError = !validatePassword(password.text)
+        passwordErrorMessage = if (passwordError) "Password harus memiliki 8 karakter, 1 huruf besar dan simbol" else ""
+
+        if (!emailError && !passwordError) {
+            signIn(email.text, password.text)
+        }
+    }
+
     val keyboard = LocalSoftwareKeyboardController.current
+
 
     Box(
         modifier = Modifier
@@ -102,32 +125,58 @@ fun SignInContent(
             Spacer(modifier = Modifier.height(100.dp))
             EmailField(
                 email = email,
+                isError = emailError,
                 onEmailValueChange = { newValue ->
                     email = newValue
+                    if (emailError) {
+                        emailError = false
+                        emailErrorMessage = ""
+                    }
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            if (emailError) {
+                Text(
+                    text = emailErrorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.align(Alignment.Start).padding(horizontal = 16.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(6.dp))
             PasswordField(
                 password = password,
+                isError = passwordError,
                 onPasswordValueChange = { newValue ->
                     password = newValue
+                    if (passwordError) {
+                        passwordError = false
+                        passwordErrorMessage = ""
+                    }
                 }
             )
-            Spacer(modifier = Modifier.height(50.dp))
+            if (passwordError) {
+                Text(
+                    text = passwordErrorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.align(Alignment.Start).padding(horizontal = 16.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
                     keyboard?.hide()
-                    signIn(email.text, password.text)
+                    handleLogin()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_200)),
                 shape = RoundedCornerShape(8.dp), // Sudut melengkung,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 Text(SIGN_IN_BUTTON, fontSize = 16.sp, fontFamily = poppSemiBold)
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Row{
                 Text(
                     modifier = Modifier.clickable {

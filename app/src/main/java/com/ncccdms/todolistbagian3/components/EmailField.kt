@@ -1,14 +1,17 @@
 package com.ncccdms.todolistbagian3.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -26,20 +29,23 @@ import kotlinx.coroutines.job
 @Composable
 fun EmailField(
     email: TextFieldValue,
-    onEmailValueChange: (newValue: TextFieldValue) -> Unit
+    onEmailValueChange: (newValue: TextFieldValue) -> Unit,
+    isError: Boolean,
 ) {
     val focusRequester = FocusRequester()
 
     OutlinedTextField(
         value = email,
+        isError = isError,
         onValueChange = { newValue ->
             onEmailValueChange(newValue)
+
         },
         label = {
             Text(
                 text = EMAIL_LABEL,
                 fontFamily = poppMedium,
-                color = BlueDark40
+                color = if (isError) MaterialTheme.colorScheme.error else BlueDark40
             )
         },
         placeholder = {
@@ -63,7 +69,10 @@ fun EmailField(
         ),
         modifier = Modifier
             .focusRequester(focusRequester)
-            .background(Color.Transparent) // Adjust background color as needed
+            .background(Color.White)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)// Adjust background color as needed
+        ,
     )
 
     LaunchedEffect(Unit) {
