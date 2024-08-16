@@ -10,6 +10,7 @@ import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoUnit
 
 class Utils {
     companion object {
@@ -57,6 +58,18 @@ class Utils {
             return tasks
                 .filter { it.taskStatus == TaskStatus.Deadline } // Only consider tasks with Deadline status
                 .sortedBy { parseDate(it.deadline) } // Sort tasks by parsed date
+        }
+
+        // Function to calculate and update the remaining days
+        fun calculateRemainingDays(deadline: String): Long {
+            val deadlineDate = parseDate(deadline)
+            val currentDate = LocalDate.now()
+
+            return if (deadlineDate != null) {
+                ChronoUnit.DAYS.between(currentDate, deadlineDate)
+            } else {
+                0 // Default to 0 if the deadline is invalid
+            }
         }
     }
 }

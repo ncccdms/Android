@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.detail_list
+package com.ncccdms.todolistbagian3.ui.screen.detail_list
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

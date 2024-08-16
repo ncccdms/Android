@@ -1,5 +1,9 @@
 package com.ncccdms.todolistbagian3.data.dummy
 
+import com.ncccdms.todolistbagian3.core.Utils.Companion.parseDate
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+
 data class Task(
     val id: Int,
     val title: String,
@@ -14,15 +18,25 @@ data class Task(
         get() {
             return when {
                 isFinished -> TaskStatus.Finished
-                deadline.isNotEmpty() && isDeadlineWithin1Day() -> TaskStatus.Deadline
+                isDeadline() || isPastDeadline()-> TaskStatus.Deadline
                 else -> TaskStatus.Ongoing
             }
         }
 
-    private fun isDeadlineWithin1Day(): Boolean {
-        // Replace this logic with the actual date comparison to check if the deadline is within 1 day
-        return false
+    private fun isDeadline(): Boolean {
+        val deadlineDate = parseDate(deadline) ?: return false
+        val currentDate = LocalDate.now()
+        val daysDifference = ChronoUnit.DAYS.between(currentDate, deadlineDate)
+        return daysDifference in 0..10
     }
+
+    private fun isPastDeadline(): Boolean {
+        val deadlineDate = parseDate(deadline) ?: return false
+        val currentDate = LocalDate.now()
+        val daysDifference = ChronoUnit.DAYS.between(currentDate, deadlineDate)
+        return daysDifference < 0
+    }
+
 }
 
 

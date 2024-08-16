@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.forgot_password
+package com.ncccdms.todolistbagian3.ui.screen.forgot_password
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

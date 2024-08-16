@@ -10,12 +10,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.data.dummy.Task
-import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
 import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 
 @Composable
-fun NearlyDeadlineSection(tasks: List<Task>) {
+fun NearlyDeadlineSection(tasks: List<Task>, navigateToDetail: (Int) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,10 +34,8 @@ fun NearlyDeadlineSection(tasks: List<Task>) {
         // Display the task(s) in this section
         tasks.forEach { task ->
             TaskCardNearlyDeadline(
-                title = task.title,
-                deadline = task.deadline,
-                status = task.statusDesc,
-                isFinished = task.taskStatus == TaskStatus.Finished
+                task = task,
+                navigateToDetail = navigateToDetail
             )
         }
     }

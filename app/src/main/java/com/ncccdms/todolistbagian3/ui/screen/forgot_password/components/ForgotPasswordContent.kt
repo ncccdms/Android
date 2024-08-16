@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.forgot_password.components
+package com.ncccdms.todolistbagian3.ui.screen.forgot_password.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

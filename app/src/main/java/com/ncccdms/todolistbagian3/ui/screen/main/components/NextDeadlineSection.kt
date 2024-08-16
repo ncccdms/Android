@@ -1,5 +1,6 @@
 package com.ncccdms.todolistbagian3.ui.screen.main.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,13 +16,12 @@ import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 
 @Composable
-fun NextDeadlineSection(tasks: List<Task>) {
+fun NextDeadlineSection(tasks: List<Task>, navigateToDetail: (Int) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-
         Text(
             text = "Next Deadline",
             color = BlueDark40,
@@ -36,9 +36,8 @@ fun NextDeadlineSection(tasks: List<Task>) {
         // Display the tasks in this section
         tasks.forEach { task ->
             TaskCardNextDeadline(
-                title = task.title,
-                deadline = task.deadline,
-                isFinished = task.taskStatus == TaskStatus.Finished
+                task = task,
+                navigateToDetail = navigateToDetail
             )
         }
     }

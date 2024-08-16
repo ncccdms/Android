@@ -13,14 +13,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ncccdms.todolistbagian3.R
 import com.ncccdms.todolistbagian3.components.CostumeTopBar
+import com.ncccdms.todolistbagian3.nav.Screen.AddScreen
 import com.ncccdms.todolistbagian3.nav.Screen.DetailListScreen
 import com.ncccdms.todolistbagian3.nav.Screen.ListScreen
 import com.ncccdms.todolistbagian3.nav.Screen.MainScreen
-import com.ncccdms.todolistbagian3.ui.detail_list.DetailScreen
+import com.ncccdms.todolistbagian3.ui.screen.add_task.AddScreen
+import com.ncccdms.todolistbagian3.ui.screen.detail_list.DetailScreen
 import com.ncccdms.todolistbagian3.ui.screen.home.components.BottomNavBar
 import com.ncccdms.todolistbagian3.ui.screen.list.ListScreen
 import com.ncccdms.todolistbagian3.ui.screen.main.MainScreen
@@ -33,6 +36,10 @@ fun HomeScreen(
 ) {
 
     val progress by remember { mutableStateOf(viewModel.progress) }
+
+    // Observe the current back stack entry and get the current route
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     Scaffold(
         topBar = {
@@ -48,7 +55,10 @@ fun HomeScreen(
             )
         },
         bottomBar = {
-            BottomNavBar(navController)
+            // Show BottomNavBar only on MainScreen or ListScreen
+            if (currentRoute == MainScreen.route || currentRoute == ListScreen.route) {
+                BottomNavBar(navController)
+            }
         },
         modifier = modifier
     ) { innerPadding ->
@@ -68,11 +78,15 @@ fun HomeScreen(
                 ListScreen(
                     navigateToDetail = { listId ->
                         navController.navigate(DetailListScreen.createRoute(listId))
-                    }
+                    },
+                    navigateToAddTask = { navController.navigate(AddScreen.route) }
                 )
             }
+            composable(route = AddScreen.route) {
+                AddScreen()
+            }
             composable(
-                route = "detail/{listId}", // The route pattern includes the argument
+                route = "detail/{listId}",
                 arguments = listOf(
                     navArgument("listId") { type = NavType.IntType }
                 )
@@ -86,3 +100,4 @@ fun HomeScreen(
         }
     }
 }
+

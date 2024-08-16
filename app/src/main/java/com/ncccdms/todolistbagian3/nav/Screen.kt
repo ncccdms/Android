@@ -1,5 +1,6 @@
 package com.ncccdms.todolistbagian3.nav
 
+import com.ncccdms.todolistbagian3.core.Constant.ADD_SCREEN
 import com.ncccdms.todolistbagian3.core.Constant.DETAIL_SCREEN
 import com.ncccdms.todolistbagian3.core.Constant.FORGOT_PASSWORD_SCREEN
 import com.ncccdms.todolistbagian3.core.Constant.HOME_SCREEN
@@ -21,6 +22,7 @@ sealed class Screen(val route:String) {
     object HomeScreen: Screen(HOME_SCREEN)
     object MainScreen: Screen(MAIN_SCREEN)
     object ListScreen: Screen(LIST_SCREEN)
+    object AddScreen: Screen(ADD_SCREEN)
     object DetailListScreen : Screen(DETAIL_SCREEN) {
         fun createRoute(listId: Int) = "detail/$listId"
     }

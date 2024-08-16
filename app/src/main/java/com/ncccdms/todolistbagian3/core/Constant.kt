@@ -22,6 +22,7 @@ object Constant {
     const val VERIFY_EMAIL_SCREEN = "Verify email"
     const val HOME_SCREEN = "Home"
     const val MAIN_SCREEN = "Main"
+    const val ADD_SCREEN = "Add"
     const val LIST_SCREEN = "List"
     const val DETAIL_SCREEN = "Detail List"
 
