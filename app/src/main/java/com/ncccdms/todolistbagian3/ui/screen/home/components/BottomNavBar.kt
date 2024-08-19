@@ -24,6 +24,7 @@ import com.ncccdms.todolistbagian3.nav.NavigationItem
 import com.ncccdms.todolistbagian3.nav.Screen.ListScreen
 import com.ncccdms.todolistbagian3.nav.Screen.MainScreen
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
+import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 
 @Composable
 fun BottomNavBar(navController: NavController) {
@@ -59,7 +60,7 @@ fun BottomNavBar(navController: NavController) {
                         tint = Blue40
                     )
                 },
-                label = { Text(item.title, color = Color.Blue) },
+                label = { Text(item.title, color = BlueDark40) },
                 selected = currentRoute == item.screen.route,
                 onClick = {
                     navController.navigate(item.screen.route) {

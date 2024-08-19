@@ -7,10 +7,13 @@ import android.widget.Toast.makeText
 import com.ncccdms.todolistbagian3.core.Constant.TAG
 import com.ncccdms.todolistbagian3.data.dummy.Task
 import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
+import java.util.Date
+import java.util.Locale
 
 class Utils {
     companion object {
@@ -51,6 +54,15 @@ class Utils {
             } catch (e: DateTimeParseException) {
                 null
             }
+        }
+
+        fun convertMillisToDate(millis: Long): String {
+            val formatter = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
+            return formatter.format(Date(millis))
+        }
+
+        fun formatDate(date: LocalDate?): String {
+            return date?.let { "${it.dayOfMonth} : ${it.monthValue} : ${it.year}" } ?: ""
         }
 
         // Convert tasks to a sortable format and sort

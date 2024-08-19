@@ -13,11 +13,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ncccdms.todolistbagian3.R
 import com.ncccdms.todolistbagian3.ui.screen.list.components.SectionTitle
 import com.ncccdms.todolistbagian3.ui.screen.list.components.TaskItem
+import com.ncccdms.todolistbagian3.ui.theme.Blue40
 
 @Composable
 fun ListScreen(
@@ -27,10 +29,11 @@ fun ListScreen(
 ) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = navigateToAddTask) {
+            FloatingActionButton(onClick = navigateToAddTask, containerColor = Blue40) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Add Task"
+                    contentDescription = "Add Task",
+                    tint = Color.White
                 )
             }
         },

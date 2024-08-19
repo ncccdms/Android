@@ -50,7 +50,7 @@ fun DetailMain(task: Task) {
         TextDetail(text = task.pic, font = poppSemiBold, size = 16.sp)
         Spacer(modifier = Modifier.height(12.dp))
         TextDetail(text = "Status", font = poppBold, size = 16.sp)
-        TextDetail(text = task.taskStatus.name, font = poppSemiBold, size = 16.sp)
+        TextDetail(text = task.statusDesc, font = poppSemiBold, size = 16.sp)
     }
 }
 

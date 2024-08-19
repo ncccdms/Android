@@ -29,7 +29,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,8 +44,6 @@ import com.ncccdms.todolistbagian3.core.Constant.FORGOT_PASSWORD
 import com.ncccdms.todolistbagian3.core.Constant.NO_ACCOUNT
 import com.ncccdms.todolistbagian3.core.Constant.SIGN_IN_BUTTON
 import com.ncccdms.todolistbagian3.core.Constant.VERTICAL_DIVIDER
-import com.ncccdms.todolistbagian3.core.Utils.Companion.validateEmail
-import com.ncccdms.todolistbagian3.core.Utils.Companion.validatePassword
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
 import com.ncccdms.todolistbagian3.ui.theme.Gray10
 import com.ncccdms.todolistbagian3.ui.theme.poppMedium
@@ -168,7 +165,7 @@ fun SignInContent(
                     keyboard?.hide()
                     handleLogin()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_200)),
+                colors = ButtonDefaults.buttonColors(containerColor = Blue40),
                 shape = RoundedCornerShape(8.dp), // Sudut melengkung,
                 modifier = Modifier
                     .fillMaxWidth()
