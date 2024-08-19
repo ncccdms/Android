@@ -44,6 +44,8 @@ import com.ncccdms.todolistbagian3.core.Constant.FORGOT_PASSWORD
 import com.ncccdms.todolistbagian3.core.Constant.NO_ACCOUNT
 import com.ncccdms.todolistbagian3.core.Constant.SIGN_IN_BUTTON
 import com.ncccdms.todolistbagian3.core.Constant.VERTICAL_DIVIDER
+import com.ncccdms.todolistbagian3.core.Utils.Companion.validateEmail
+import com.ncccdms.todolistbagian3.core.Utils.Companion.validatePassword
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
 import com.ncccdms.todolistbagian3.ui.theme.Gray10
 import com.ncccdms.todolistbagian3.ui.theme.poppMedium

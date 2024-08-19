@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ncccdms.todolistbagian3.components.ProgressBar
 import com.ncccdms.todolistbagian3.domain.model.Response.*
-import com.ncccdms.todolistbagian3.core.Utils.Companion.print
 import com.ncccdms.todolistbagian3.ui.screen.sign_in.SignInViewModel
 
 @Composable
