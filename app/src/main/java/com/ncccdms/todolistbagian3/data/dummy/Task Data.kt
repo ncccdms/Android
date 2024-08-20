@@ -105,7 +105,17 @@ object TaskData {
         Task(
             id = 11,
             title = "Test",
-            deadline = "14 August 2024",
+            deadline = "21 August 2024",
+            isFinished = false,
+            statusDesc = "Sudah diterima oleh Kabid 3",
+            pic = "Hilda",
+            createAt = "3 May 2024",
+            creator = "Indah"
+        ),
+        Task(
+            id = 13,
+            title = "Test2",
+            deadline = "20 August 2024",
             isFinished = false,
             statusDesc = "Sudah diterima oleh Kabid 3",
             pic = "Hilda",

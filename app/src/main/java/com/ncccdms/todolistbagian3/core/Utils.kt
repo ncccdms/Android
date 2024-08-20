@@ -1,10 +1,19 @@
 package com.ncccdms.todolistbagian3.core
 
+import android.app.AlarmManager
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.makeText
+import com.ncccdms.todolistbagian3.core.Constant.CHANNEL_ID
 import com.ncccdms.todolistbagian3.core.Constant.TAG
+import com.ncccdms.todolistbagian3.core.receiver.DeadlineReminderReceiver
 import com.ncccdms.todolistbagian3.data.dummy.Task
 import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
 import java.text.SimpleDateFormat
@@ -59,10 +68,6 @@ class Utils {
         fun convertMillisToDate(millis: Long): String {
             val formatter = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
             return formatter.format(Date(millis))
-        }
-
-        fun formatDate(date: LocalDate?): String {
-            return date?.let { "${it.dayOfMonth} : ${it.monthValue} : ${it.year}" } ?: ""
         }
 
         // Convert tasks to a sortable format and sort

@@ -13,9 +13,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ncccdms.todolistbagian3.components.LockScreenOrientation
 import com.ncccdms.todolistbagian3.core.Utils.Companion.getIsSplashScreenShown
+import com.ncccdms.todolistbagian3.core.alarm.AlarmScheduler
+import com.ncccdms.todolistbagian3.core.alarm.NotificationHelper
+import com.ncccdms.todolistbagian3.core.alarm.PermissionHelper
+import com.ncccdms.todolistbagian3.data.dummy.Task
 import com.ncccdms.todolistbagian3.nav.NavGraph
 import com.ncccdms.todolistbagian3.nav.Screen
-import com.ncccdms.todolistbagian3.nav.Screen.MenuScreen
 import com.ncccdms.todolistbagian3.nav.Screen.SplashScreen
 import com.ncccdms.todolistbagian3.nav.Screen.VerifyEmailScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,9 +28,23 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
     private val viewModel by viewModels<MainViewModel>()
+    private fun scheduleAllTaskDeadlines(sortedTasks: List<Task>) {
+        val alarmScheduler = AlarmScheduler(applicationContext)
+        alarmScheduler.scheduleDailyTaskDeadlineNotification(sortedTasks)
+    }
+    private fun getSortedTasks(): List<Task> {
+        // Fetch and return the list of sorted tasks with their statuses
+        return listOf() // Example placeholder, replace with actual implementation
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val sortedTasks = getSortedTasks() // Implement this function to get your sorted tasks
+        scheduleAllTaskDeadlines(sortedTasks)
+        NotificationHelper(this).createNotificationChannel()
+        PermissionHelper(this).requestNotificationPermission()
+
         setContent {
             LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             navController = rememberNavController()

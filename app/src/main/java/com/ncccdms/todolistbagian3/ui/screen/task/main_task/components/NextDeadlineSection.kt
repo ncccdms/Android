@@ -1,6 +1,5 @@
-package com.ncccdms.todolistbagian3.ui.screen.main.components
+package com.ncccdms.todolistbagian3.ui.screen.task.main_task.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,7 +10,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.data.dummy.Task
-import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
 import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 

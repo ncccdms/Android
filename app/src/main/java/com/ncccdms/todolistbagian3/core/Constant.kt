@@ -30,6 +30,10 @@ object Constant {
     const val EMAIL_LABEL = "Email"
     const val PASSWORD_LABEL = "Password"
 
+    //Request
+    const val CHANNEL_ID = "task_deadline_channel"
+    const val PERMISSION_REQUEST_CODE = 1001
+
     //Useful
     const val EMPTY_STRING = ""
     const val VERTICAL_DIVIDER = "|"
@@ -40,6 +44,8 @@ object Constant {
     const val ALREADY_USER = "Already a user? Sign in."
     const val ALREADY_VERIFIED = "Already verified?"
     const val SPAM_EMAIL = "If not, please also check the spam folder."
+    const val NOTIFICATION_REMINDER_NAME = "Reminder Notification"
+    const val NOTIFICATION_REMINDER_DESCRIPTION = "This channel is used to show reminder notification"
 
     //Messages
     const val VERIFY_EMAIL_MESSAGE = "We've sent you an email with a link to verify the email."

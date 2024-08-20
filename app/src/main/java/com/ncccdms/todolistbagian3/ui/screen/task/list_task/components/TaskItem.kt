@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.screen.list.components
+package com.ncccdms.todolistbagian3.ui.screen.task.list_task.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,11 +9,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,10 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.R
+import com.ncccdms.todolistbagian3.core.Utils.Companion.showMessage
 import com.ncccdms.todolistbagian3.data.dummy.Task
 import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
@@ -38,6 +39,8 @@ fun TaskItem(
     task: Task,
     navigateToDetail: (Int) -> Unit
 ) {
+    val context = LocalContext.current
+
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
@@ -57,14 +60,15 @@ fun TaskItem(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(
-                checked = task.isFinished,
-                onCheckedChange = { /* TODO: Handle checkbox state */ },
-                colors = CheckboxDefaults.colors(
-                    checkedColor = BlueDark40,
-                    uncheckedColor = Color.White,
-                    checkmarkColor = BlueDark40
-                )
+            Icon(
+                painter = painterResource(
+                    id = if (task.isFinished) R.drawable.bx_checkbox_checked else R.drawable.bx_checkbox
+                ),
+                tint = Color.White,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { showMessage(context,"CheckBox") }
             )
             Row(
                 modifier = Modifier
@@ -108,7 +112,7 @@ fun TaskItem(
                         fontFamily = poppSemiBold
                     )
                 }
-                IconButton(onClick = { /* TODO: Handle edit click */ }) {
+                IconButton(onClick = { showMessage(context,"Edit Task") }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_edit),
                         contentDescription = "Edit Task",

@@ -22,11 +22,11 @@ import com.ncccdms.todolistbagian3.nav.Screen.AddScreen
 import com.ncccdms.todolistbagian3.nav.Screen.DetailListScreen
 import com.ncccdms.todolistbagian3.nav.Screen.ListScreen
 import com.ncccdms.todolistbagian3.nav.Screen.MainScreen
-import com.ncccdms.todolistbagian3.ui.screen.add_task.AddScreen
 import com.ncccdms.todolistbagian3.ui.screen.detail_list.DetailScreen
 import com.ncccdms.todolistbagian3.ui.screen.home.components.BottomNavBar
-import com.ncccdms.todolistbagian3.ui.screen.list.ListScreen
-import com.ncccdms.todolistbagian3.ui.screen.main.MainScreen
+import com.ncccdms.todolistbagian3.ui.screen.task.add_task.AddScreen
+import com.ncccdms.todolistbagian3.ui.screen.task.list_task.ListScreen
+import com.ncccdms.todolistbagian3.ui.screen.task.main_task.MainScreen
 
 @Composable
 fun HomeScreen(

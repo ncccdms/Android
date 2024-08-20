@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.screen.add_task
+package com.ncccdms.todolistbagian3.ui.screen.task.add_task
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

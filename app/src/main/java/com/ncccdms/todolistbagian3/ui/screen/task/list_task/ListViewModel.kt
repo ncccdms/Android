@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.screen.list
+package com.ncccdms.todolistbagian3.ui.screen.task.list_task
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

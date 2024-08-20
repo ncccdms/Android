@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.screen.list.components
+package com.ncccdms.todolistbagian3.ui.screen.task.list_task.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

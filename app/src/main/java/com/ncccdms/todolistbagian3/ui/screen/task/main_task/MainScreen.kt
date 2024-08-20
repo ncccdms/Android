@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.screen.main
+package com.ncccdms.todolistbagian3.ui.screen.task.main_task
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,17 +9,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.ncccdms.todolistbagian3.core.Utils.Companion.sortTasksByDeadline
 import com.ncccdms.todolistbagian3.data.dummy.TaskData
-import com.ncccdms.todolistbagian3.ui.screen.main.components.NearlyDeadlineSection
-import com.ncccdms.todolistbagian3.ui.screen.main.components.NextDeadlineSection
+import com.ncccdms.todolistbagian3.ui.screen.task.main_task.components.NearlyDeadlineSection
+import com.ncccdms.todolistbagian3.ui.screen.task.main_task.components.NextDeadlineSection
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     navigateToDetail: (Int) -> Unit,
 ) {
-    // Create a scroll state
+
     val scrollState = rememberScrollState()
     val sortedTasks = remember { sortTasksByDeadline(TaskData.dummytask) }
+//    val context = LocalContext.current
+//    val alarmScheduler = remember { AlarmScheduler(context) }
+//
+//    // Iterate through tasks and schedule alarms if the task has a deadline
+//    sortedTasks.forEach { task ->
+//        if (task.taskStatus == TaskStatus.Deadline) {
+//            alarmScheduler.scheduleTaskDeadlineNotification(
+//                task.id,
+//                task.title,
+//                task.statusDesc,
+//                alarmScheduler.getTriggerTime()
+//            )
+//        }
+//    }
 
     Column(
         modifier = modifier

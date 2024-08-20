@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.screen.main.components
+package com.ncccdms.todolistbagian3.ui.screen.task.main_task.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

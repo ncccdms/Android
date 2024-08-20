@@ -1,4 +1,4 @@
-package com.ncccdms.todolistbagian3.ui.screen.list
+package com.ncccdms.todolistbagian3.ui.screen.task.list_task
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ncccdms.todolistbagian3.R
-import com.ncccdms.todolistbagian3.ui.screen.list.components.SectionTitle
-import com.ncccdms.todolistbagian3.ui.screen.list.components.TaskItem
+import com.ncccdms.todolistbagian3.ui.screen.task.list_task.components.SectionTitle
+import com.ncccdms.todolistbagian3.ui.screen.task.list_task.components.TaskItem
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
 
 @Composable
