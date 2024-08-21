@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.R
 import com.ncccdms.todolistbagian3.core.Utils.Companion.showMessage
-import com.ncccdms.todolistbagian3.data.dummy.Task
-import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
+import com.ncccdms.todolistbagian3.domain.model.Task
+import com.ncccdms.todolistbagian3.domain.model.TaskStatus
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
 import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppBold
@@ -37,7 +37,7 @@ import com.ncccdms.todolistbagian3.ui.theme.poppSemiBold
 @Composable
 fun TaskItem(
     task: Task,
-    navigateToDetail: (Int) -> Unit
+    navigateToDetail: (String) -> Unit
 ) {
     val context = LocalContext.current
 

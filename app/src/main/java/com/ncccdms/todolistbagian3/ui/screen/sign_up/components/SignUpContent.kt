@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.R
 import com.ncccdms.todolistbagian3.components.EmailField
 import com.ncccdms.todolistbagian3.components.PasswordField
+import com.ncccdms.todolistbagian3.components.UsernameField
 import com.ncccdms.todolistbagian3.core.Constant.ALREADY_USER
 import com.ncccdms.todolistbagian3.core.Constant.EMPTY_STRING
 import com.ncccdms.todolistbagian3.core.Constant.SIGN_UP_BUTTON
@@ -53,44 +54,48 @@ import com.ncccdms.todolistbagian3.ui.theme.poppSemiBold
 @ExperimentalComposeUiApi
 fun SignUpContent(
     padding: PaddingValues,
-    signUp: (email: String, password: String) -> Unit,
+    signUp: (email: String, password: String, username: String) -> Unit,
     navigateToSignInScreen: () -> Unit
 ) {
     var email by rememberSaveable(
         stateSaver = TextFieldValue.Saver,
         init = {
-            mutableStateOf(
-                value = TextFieldValue(
-                    text = EMPTY_STRING
-                )
-            )
+            mutableStateOf(TextFieldValue(text = EMPTY_STRING))
         }
     )
     var password by rememberSaveable(
         stateSaver = TextFieldValue.Saver,
         init = {
-            mutableStateOf(
-                value = TextFieldValue(
-                    text = EMPTY_STRING
-                )
-            )
+            mutableStateOf(TextFieldValue(text = EMPTY_STRING))
+        }
+    )
+    var username by rememberSaveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(TextFieldValue(text = EMPTY_STRING))
         }
     )
 
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
+    var usernameError by remember { mutableStateOf(false) }
+
     var emailErrorMessage by remember { mutableStateOf("") }
     var passwordErrorMessage by remember { mutableStateOf("") }
+    var usernameErrorMessage by remember { mutableStateOf("") }
 
-    fun handleLogin() {
+    fun handleSignUp() {
+        usernameError = username.text.isBlank()
+        usernameErrorMessage = if (usernameError) "Username tidak boleh kosong" else ""
+
         emailError = !validateEmail(email.text)
         emailErrorMessage = if (emailError) "Email harus mengandung simbol @" else ""
 
         passwordError = !validatePassword(password.text)
         passwordErrorMessage = if (passwordError) "Password harus memiliki 8 karakter, 1 huruf besar dan simbol" else ""
 
-        if (!emailError && !passwordError) {
-            signUp(email.text, password.text)
+        if (!emailError && !passwordError && !usernameError) {
+            signUp(email.text, password.text, username.text)
         }
     }
 
@@ -105,7 +110,7 @@ fun SignUpContent(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painter = painterResource(id = R.drawable.logo_cilacap), // Your logo resource
+                painter = painterResource(id = R.drawable.logo_cilacap),
                 contentDescription = "Logo",
                 modifier = Modifier.size(100.dp)
             )
@@ -117,7 +122,27 @@ fun SignUpContent(
                 color = Color.Black,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(40.dp))
+            UsernameField(
+                username = username,
+                isError = usernameError,
+                onEmailValueChange = { newValue ->
+                    username = newValue
+                    if (usernameError) {
+                        usernameError = false
+                        usernameErrorMessage = ""
+                    }
+                }
+            )
+            if (usernameError) {
+                Text(
+                    text = usernameErrorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.align(Alignment.Start).padding(horizontal = 16.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(6.dp))
             EmailField(
                 email = email,
                 isError = emailError,
@@ -161,10 +186,10 @@ fun SignUpContent(
             Button(
                 onClick = {
                     keyboard?.hide()
-                    handleLogin()
+                    handleSignUp()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_200)),
-                shape = RoundedCornerShape(8.dp), // Sudut melengkung,
+                shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)

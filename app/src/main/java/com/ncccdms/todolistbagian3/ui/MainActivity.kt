@@ -16,7 +16,7 @@ import com.ncccdms.todolistbagian3.core.Utils.Companion.getIsSplashScreenShown
 import com.ncccdms.todolistbagian3.core.alarm.AlarmScheduler
 import com.ncccdms.todolistbagian3.core.alarm.NotificationHelper
 import com.ncccdms.todolistbagian3.core.alarm.PermissionHelper
-import com.ncccdms.todolistbagian3.data.dummy.Task
+import com.ncccdms.todolistbagian3.domain.model.Task
 import com.ncccdms.todolistbagian3.nav.NavGraph
 import com.ncccdms.todolistbagian3.nav.Screen
 import com.ncccdms.todolistbagian3.nav.Screen.SplashScreen

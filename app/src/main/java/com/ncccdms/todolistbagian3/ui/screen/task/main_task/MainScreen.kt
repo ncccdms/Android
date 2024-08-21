@@ -15,25 +15,11 @@ import com.ncccdms.todolistbagian3.ui.screen.task.main_task.components.NextDeadl
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    navigateToDetail: (Int) -> Unit,
+    navigateToDetail: (String) -> Unit,
 ) {
 
     val scrollState = rememberScrollState()
     val sortedTasks = remember { sortTasksByDeadline(TaskData.dummytask) }
-//    val context = LocalContext.current
-//    val alarmScheduler = remember { AlarmScheduler(context) }
-//
-//    // Iterate through tasks and schedule alarms if the task has a deadline
-//    sortedTasks.forEach { task ->
-//        if (task.taskStatus == TaskStatus.Deadline) {
-//            alarmScheduler.scheduleTaskDeadlineNotification(
-//                task.id,
-//                task.title,
-//                task.statusDesc,
-//                alarmScheduler.getTriggerTime()
-//            )
-//        }
-//    }
 
     Column(
         modifier = modifier

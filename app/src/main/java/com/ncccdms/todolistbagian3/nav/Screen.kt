@@ -24,6 +24,6 @@ sealed class Screen(val route:String) {
     object ListScreen: Screen(LIST_SCREEN)
     object AddScreen: Screen(ADD_SCREEN)
     object DetailListScreen : Screen(DETAIL_SCREEN) {
-        fun createRoute(listId: Int) = "detail/$listId"
+        fun createRoute(listId: String) = "detail/$listId"
     }
 }

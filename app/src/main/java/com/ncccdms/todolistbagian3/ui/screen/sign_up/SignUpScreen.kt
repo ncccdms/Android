@@ -24,8 +24,8 @@ fun SignUpScreen(
         content = { padding ->
             SignUpContent(
                 padding = padding,
-                signUp = { email, password ->
-                    viewModel.signUpWithEmailAndPassword(email, password)
+                signUp = { email, password, username->
+                    viewModel.signUpWithEmailAndPassword(email, password, username)
                 },
                 navigateToSignInScreen = navigateToSignInScreen
             )

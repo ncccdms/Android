@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ncccdms.todolistbagian3.data.dummy.Task
+import com.ncccdms.todolistbagian3.domain.model.Task
 import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 import com.ncccdms.todolistbagian3.ui.theme.poppBold
@@ -20,7 +20,7 @@ import com.ncccdms.todolistbagian3.ui.theme.poppSemiBold
 import com.ncccdms.todolistbagian3.data.dummy.TaskData.dummytask
 
 @Composable
-fun DetailScreen(listId: Int,navigateBack: () -> Unit,) {
+fun DetailScreen(listId: String,navigateBack: () -> Unit,) {
     val task = dummytask.find { it.id == listId }
     task?.let {
         DetailMain(task)

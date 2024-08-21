@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.ncccdms.todolistbagian3.core.Constant.EMAIL_LABEL
+import com.ncccdms.todolistbagian3.core.Constant.USERNAME_LABEL
 import com.ncccdms.todolistbagian3.ui.theme.Blue40
 import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppMedium
@@ -26,15 +27,15 @@ import kotlinx.coroutines.job
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmailField(
-    email: TextFieldValue,
+fun UsernameField(
+    username: TextFieldValue,
     onEmailValueChange: (newValue: TextFieldValue) -> Unit,
     isError: Boolean,
 ) {
     val focusRequester = FocusRequester()
 
     OutlinedTextField(
-        value = email,
+        value = username,
         isError = isError,
         onValueChange = { newValue ->
             onEmailValueChange(newValue)
@@ -42,7 +43,7 @@ fun EmailField(
         },
         label = {
             Text(
-                text = EMAIL_LABEL,
+                text = USERNAME_LABEL,
                 fontFamily = poppMedium,
                 color = if (isError) MaterialTheme.colorScheme.error else BlueDark40
             )
@@ -64,7 +65,7 @@ fun EmailField(
         ),
         singleLine = true,
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email
+            keyboardType = KeyboardType.Text
         ),
         modifier = Modifier
             .focusRequester(focusRequester)
@@ -74,5 +75,10 @@ fun EmailField(
         ,
     )
 
+    LaunchedEffect(Unit) {
+        coroutineContext.job.invokeOnCompletion {
+            focusRequester.requestFocus()
+        }
+    }
 }
 

@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ncccdms.todolistbagian3.data.dummy.Task
+import com.ncccdms.todolistbagian3.domain.model.Task
 import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 
 @Composable
-fun NextDeadlineSection(tasks: List<Task>, navigateToDetail: (Int) -> Unit) {
+fun NextDeadlineSection(tasks: List<Task>, navigateToDetail: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

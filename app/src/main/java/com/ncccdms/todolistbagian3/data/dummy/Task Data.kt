@@ -1,9 +1,11 @@
 package com.ncccdms.todolistbagian3.data.dummy
 
+import com.ncccdms.todolistbagian3.domain.model.Task
+
 object TaskData {
     val dummytask = listOf(
         Task(
-            id = 1,
+            id = "list1",
             title = "Monitor isian evidence EPSS",
             deadline = "14 May 2024",
             isFinished = true,
@@ -13,7 +15,7 @@ object TaskData {
             creator = "Kabid 3"
         ),
         Task(
-            id = 2,
+            id = "list2",
             title = "Membangun Portal Satu Data ",
             deadline = "19 May 2024",
             isFinished = true,
@@ -23,7 +25,7 @@ object TaskData {
             creator = "Kabid 3"
         ),
         Task(
-            id = 3,
+            id = "list3",
             title = "Membuat surat undangan bimtek keamanan informasi",
             deadline = "28 August 2024",
             isFinished = true,
@@ -33,7 +35,7 @@ object TaskData {
             creator = "Kabid 3"
         ),
         Task(
-            id = 4,
+            id = "list4",
             title = "Menyiapkan dokumen pengadaan jasa konsultasi roadmap statistik",
             deadline = "24 May 2024",
             isFinished = false,
@@ -43,7 +45,7 @@ object TaskData {
             creator = "Kabid 3"
         ),
         Task(
-            id = 5,
+            id = "list5",
             title = "Membuat surat undangan sosialisasi metadata statistik",
             deadline = "24 May 2024",
             isFinished = true,
@@ -53,7 +55,7 @@ object TaskData {
             creator = "Indah"
         ),
         Task(
-            id = 6,
+            id = "list6",
             title = "Membuat laporan ketua panitia sosialisasi portal satu data",
             deadline = "24 May 2024",
             isFinished = true,
@@ -63,7 +65,7 @@ object TaskData {
             creator = "Indah"
         ),
         Task(
-            id = 7,
+            id = "list7",
             title = "Membuat surat permohonan narasumber dalam acara sosialisasi metadata statistik",
             deadline = "24 May 2024",
             isFinished = false,
@@ -73,7 +75,7 @@ object TaskData {
             creator = "Indah"
         ),
         Task(
-            id = 8,
+            id = "list8",
             title = "Membuat naskah sambutan pak kadis dalam acara sosialisasi metadata statistik",
             deadline = "24 May 2024",
             isFinished = true,
@@ -83,7 +85,7 @@ object TaskData {
             creator = "Indah"
         ),
         Task(
-            id = 9,
+            id = "list9",
             title = "Mengkonsep edaran ke OPD web defacement tindak lanjut dari edaran BSSN",
             deadline = "24 May 2024",
             isFinished = true,
@@ -93,7 +95,7 @@ object TaskData {
             creator = "Indah"
         ),
         Task(
-            id = 10,
+            id = "list10",
             title = "Mengkonsep edaran ke OPD web defacement tindak lanjut dari edaran BSSN",
             deadline = "15 August 2024",
             isFinished = false,
@@ -103,7 +105,7 @@ object TaskData {
             creator = "Indah"
         ),
         Task(
-            id = 11,
+            id = "list11",
             title = "Test",
             deadline = "21 August 2024",
             isFinished = false,
@@ -113,7 +115,7 @@ object TaskData {
             creator = "Indah"
         ),
         Task(
-            id = 13,
+            id = "list12",
             title = "Test2",
             deadline = "20 August 2024",
             isFinished = false,

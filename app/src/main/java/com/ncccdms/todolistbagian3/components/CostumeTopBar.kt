@@ -37,6 +37,7 @@ import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.LightBlue40
 import com.ncccdms.todolistbagian3.ui.theme.TintBlue40
 import com.ncccdms.todolistbagian3.ui.theme.poppBold
+import com.ncccdms.todolistbagian3.ui.theme.poppMedium
 import com.ncccdms.todolistbagian3.ui.theme.poppSemiBold
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,6 +46,7 @@ fun CostumeTopBar(
     title: String,
     signOut: () -> Unit,
     revokeAccess: () -> Unit,
+    username: String,
     progress: Float // New parameter for progress
 ) {
     var openMenu by remember { mutableStateOf(false) }
@@ -91,14 +93,18 @@ fun CostumeTopBar(
                     }
                 ) {
                     DropdownMenuItem(
-                        text = { Text(SIGN_OUT_ITEM) },
+                        text = { Text("Welcome, $username!", fontFamily = poppMedium) },
+                        onClick = {}
+                    )
+                    DropdownMenuItem(
+                        text = { Text(SIGN_OUT_ITEM,fontFamily = poppMedium) },
                         onClick = {
                             signOut()
                             openMenu = !openMenu
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text(REVOKE_ACCESS_ITEM) },
+                        text = { Text(REVOKE_ACCESS_ITEM,fontFamily = poppMedium) },
                         onClick = {
                             revokeAccess()
                             openMenu = !openMenu

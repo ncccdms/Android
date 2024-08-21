@@ -3,6 +3,7 @@ package com.ncccdms.todolistbagian3.ui.screen.home
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +35,7 @@ fun HomeScreen(
     navController: NavHostController = rememberNavController(),
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-
+    val username by viewModel.username.collectAsState()
     val progress by remember { mutableStateOf(viewModel.progress) }
 
     // Observe the current back stack entry and get the current route
@@ -51,6 +52,7 @@ fun HomeScreen(
                 revokeAccess = {
                     viewModel.revokeAccess()
                 },
+                username = username,
                 progress = progress
             )
         },
@@ -88,15 +90,16 @@ fun HomeScreen(
             composable(
                 route = "detail/{listId}",
                 arguments = listOf(
-                    navArgument("listId") { type = NavType.IntType }
+                    navArgument("listId") { type = NavType.StringType    }
                 )
             ) { backStackEntry ->
-                val listId = backStackEntry.arguments?.getInt("listId") ?: -1
+                val listId = backStackEntry.arguments?.getString("listId") ?: ""
                 DetailScreen(
                     listId = listId,
                     navigateBack = { navController.navigateUp() }
                 )
             }
+
         }
     }
 }

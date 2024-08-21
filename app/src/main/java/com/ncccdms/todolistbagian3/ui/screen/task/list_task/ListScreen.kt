@@ -24,7 +24,7 @@ import com.ncccdms.todolistbagian3.ui.theme.Blue40
 @Composable
 fun ListScreen(
     viewModel: ListViewModel = hiltViewModel(),
-    navigateToDetail: (Int) -> Unit,
+    navigateToDetail: (String) -> Unit,
     navigateToAddTask: () -> Unit
 ) {
     Scaffold(

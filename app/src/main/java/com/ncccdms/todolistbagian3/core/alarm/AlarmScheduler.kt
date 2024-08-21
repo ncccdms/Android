@@ -6,8 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.ncccdms.todolistbagian3.core.receiver.DeadlineReminderReceiver
-import com.ncccdms.todolistbagian3.data.dummy.Task
-import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
+import com.ncccdms.todolistbagian3.domain.model.Task
+import com.ncccdms.todolistbagian3.domain.model.TaskStatus
 import java.util.Calendar
 
 class AlarmScheduler(private val context: Context) {
@@ -15,15 +15,16 @@ class AlarmScheduler(private val context: Context) {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     @SuppressLint("ScheduleExactAlarm")
-    fun scheduleTaskDeadlineNotification(taskId: Int, taskTitle: String, taskStatusDesc: String, triggerTime: Long) {
+    fun scheduleTaskDeadlineNotification(taskId: String, taskTitle: String, taskStatusDesc: String, triggerTime: Long) {
         val intent = Intent(context, DeadlineReminderReceiver::class.java).apply {
             putExtra("taskId", taskId)
             putExtra("taskTitle", taskTitle)
             putExtra("taskStatusDesc", taskStatusDesc)
         }
+        val hashId = taskId.hashCode()
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            taskId, // Use taskId to ensure uniqueness
+            hashId, // Use taskId to ensure uniqueness
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

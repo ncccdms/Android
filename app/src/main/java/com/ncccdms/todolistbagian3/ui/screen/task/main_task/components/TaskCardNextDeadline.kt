@@ -23,14 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ncccdms.todolistbagian3.core.Utils.Companion.calculateRemainingDays
-import com.ncccdms.todolistbagian3.data.dummy.Task
-import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
+import com.ncccdms.todolistbagian3.domain.model.Task
+import com.ncccdms.todolistbagian3.domain.model.TaskStatus
 import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 import com.ncccdms.todolistbagian3.ui.theme.poppBold
 
 @Composable
-fun TaskCardNextDeadline(task: Task, navigateToDetail: (Int) -> Unit) {
+fun TaskCardNextDeadline(task: Task, navigateToDetail: (String) -> Unit) {
     var remainingDays by remember { mutableStateOf(0L) }
 
     // Calculate remaining days initially and update daily

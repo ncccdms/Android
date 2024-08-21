@@ -1,21 +1,12 @@
 package com.ncccdms.todolistbagian3.core
 
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.util.Log
 import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.makeText
-import com.ncccdms.todolistbagian3.core.Constant.CHANNEL_ID
 import com.ncccdms.todolistbagian3.core.Constant.TAG
-import com.ncccdms.todolistbagian3.core.receiver.DeadlineReminderReceiver
-import com.ncccdms.todolistbagian3.data.dummy.Task
-import com.ncccdms.todolistbagian3.data.dummy.TaskStatus
+import com.ncccdms.todolistbagian3.domain.model.Task
+import com.ncccdms.todolistbagian3.domain.model.TaskStatus
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

@@ -28,6 +28,7 @@ object Constant {
 
     //Labels
     const val EMAIL_LABEL = "Email"
+    const val USERNAME_LABEL = "Username"
     const val PASSWORD_LABEL = "Password"
 
     //Request
