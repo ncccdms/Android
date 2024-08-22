@@ -5,9 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ncccdms.todolistbagian3.domain.model.Task
 import com.ncccdms.todolistbagian3.data.dummy.TaskData
-import com.ncccdms.todolistbagian3.domain.model.Response
+import com.ncccdms.todolistbagian3.domain.model.Task
 import com.ncccdms.todolistbagian3.domain.model.Response.Failure
 import com.ncccdms.todolistbagian3.domain.model.TaskStatus
 import com.ncccdms.todolistbagian3.domain.model.Response.Loading

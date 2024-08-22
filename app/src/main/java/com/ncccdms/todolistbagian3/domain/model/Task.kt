@@ -10,14 +10,14 @@ data class User(
 )
 
 data class Task(
-    val id: String,
-    val title: String,
-    val deadline: String = "no deadline listed",
-    val statusDesc: String,
-    val isFinished: Boolean,
-    val creator: String,
-    val createAt: String,
-    val pic: String
+    val id: String = "", // Default value
+    val title: String = "",
+    val deadline: String = "",
+    val statusDesc: String = "",
+    val isFinished: Boolean = false,
+    val creator: String = "",
+    val createAt: String = "",
+    val pic: String = ""
 ) {
     val taskStatus: TaskStatus
         get() = when {

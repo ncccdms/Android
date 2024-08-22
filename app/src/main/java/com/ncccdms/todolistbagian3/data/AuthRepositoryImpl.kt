@@ -48,7 +48,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun saveUserDetails(userId: String, username: String): saveUserDetailsResponse {
         return try {
             val userDoc = firestore.collection("users").document(userId)
-            userDoc.set(mapOf("username" to username, "wee" to userId)).await()
+            userDoc.set(mapOf("username" to username, "UID" to userId)).await()
             Success(true)
         } catch (e: Exception) {
             Failure(e)
