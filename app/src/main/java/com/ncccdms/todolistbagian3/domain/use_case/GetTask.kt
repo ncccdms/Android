@@ -7,7 +7,5 @@ import kotlinx.coroutines.flow.Flow
 class GetTask(
     private val repo: TasksRepository
 ) {
-    operator fun invoke(
-        userId: String
-    ): Flow<TasksResponse> = repo.getTasksFromFirestore(userId)
+    operator fun invoke(userId: String): Flow<TasksResponse> = repo.getTasksFromFirestore(userId)
 }

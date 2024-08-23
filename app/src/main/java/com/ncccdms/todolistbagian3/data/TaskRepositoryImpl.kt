@@ -39,28 +39,31 @@ class TasksRepositoryImpl @Inject constructor(
 
     override suspend fun addTaskToFirestore(userId: String, task: Task): AddTaskResponse {
         return try {
+            // Reference to the user's tasks subcollection
             val tasksRef = firestore.collection("users").document(userId).collection("tasks")
 
-            // Generate current date in "d MMMM yyyy" format
+            // Set the current date in the desired format
             val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
             val currentDate = dateFormat.format(Date())
 
-            // Create a new task with current date as createAt
+            // Create task without the ID
             val taskWithDate = task.copy(createAt = currentDate)
 
-            // Add the task to Firestore
+            // Add the task to Firestore and retrieve the document reference
             val documentRef = tasksRef.add(taskWithDate).await()
 
-            // Optionally update the task with ID if needed
-             val updatedTask = taskWithDate.copy(id = documentRef.id)
-             documentRef.set(updatedTask).await()
+            // Update the task with the Firestore-generated document ID
+            val updatedTask = taskWithDate.copy(id = documentRef.id)
 
-            // Return Success with true if task was added successfully
+            // Write the updated task back to Firestore using the document reference
+            tasksRef.document(documentRef.id).set(updatedTask).await()
+
             Success(true)
         } catch (e: Exception) {
             Failure(e)
         }
     }
+
 
     override suspend fun deleteTaskFromFirestore(userId: String, taskId: String): DeleteTaskResponse {
         return try {

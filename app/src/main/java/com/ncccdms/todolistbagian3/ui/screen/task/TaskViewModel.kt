@@ -25,8 +25,6 @@ class TaskViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    var taskResponse by mutableStateOf<TasksResponse>(Loading)
-        private set
     var addTaskResponse by mutableStateOf<AddTaskResponse>(Loading) // Initialize with Loading state
         private set
     var deleteTaskResponse by mutableStateOf<DeleteTaskResponse>(Success(false))
@@ -34,26 +32,10 @@ class TaskViewModel @Inject constructor(
     var updateTaskResponse by mutableStateOf<UpdateTaskResponse>(Success(false))
         private set
 
-    init {
-        getTasks()
-    }
-
-    private fun getTasks() = viewModelScope.launch {
-        val userId = authRepository.currentUser?.uid // Get the current user ID
-        if (userId != null) {
-            useCases.getTasks(userId).collect { response ->
-                taskResponse = response
-            }
-        } else {
-            taskResponse = Failure(Exception("User ID is null"))
-        }
-    }
-
     fun addTask(
         title: String,
         deadline: String,
         statusDesc: String,
-        isFinished: Boolean,
         pic: String
     ) = viewModelScope.launch {
         val userId = authRepository.currentUser?.uid // Get the current user ID
@@ -67,13 +49,13 @@ class TaskViewModel @Inject constructor(
                         val username = usernameResponse.data
 
                         val task = Task(
-                            id = "",
+                            id = "", // Initially empty, will be filled later
                             title = title,
                             deadline = deadline,
                             statusDesc = statusDesc,
-                            isFinished = isFinished,
+                            isFinished = false,
                             creator = username,
-                            createAt = "",
+                            createAt = "", // This will be set when adding to Firestore
                             pic = pic
                         )
 
@@ -85,8 +67,7 @@ class TaskViewModel @Inject constructor(
                             is Failure -> {
                                 addTaskResponse = Failure(response.e)
                             }
-
-                            Loading -> Loading
+                            Loading -> addTaskResponse = Loading
                         }
                     }
                     is Failure -> {

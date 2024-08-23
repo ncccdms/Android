@@ -23,7 +23,7 @@ import com.ncccdms.todolistbagian3.nav.Screen.AddScreen
 import com.ncccdms.todolistbagian3.nav.Screen.DetailListScreen
 import com.ncccdms.todolistbagian3.nav.Screen.ListScreen
 import com.ncccdms.todolistbagian3.nav.Screen.MainScreen
-import com.ncccdms.todolistbagian3.ui.screen.detail_list.DetailScreen
+import com.ncccdms.todolistbagian3.ui.screen.task.detail_list.DetailScreen
 import com.ncccdms.todolistbagian3.ui.screen.home.components.BottomNavBar
 import com.ncccdms.todolistbagian3.ui.screen.task.add_task.AddScreen
 import com.ncccdms.todolistbagian3.ui.screen.task.list_task.ListScreen
@@ -37,8 +37,6 @@ fun HomeScreen(
 ) {
     val username by viewModel.username.collectAsState()
     val progress by remember { mutableStateOf(viewModel.progress) }
-
-    // Observe the current back stack entry and get the current route
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
@@ -85,7 +83,9 @@ fun HomeScreen(
                 )
             }
             composable(route = AddScreen.route) {
-                AddScreen()
+                AddScreen(
+                    navigateBack = { navController.navigateUp() }
+                )
             }
             composable(
                 route = "detail/{listId}",

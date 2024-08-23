@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ncccdms.todolistbagian3.ui.screen.detail_list.TextDetail
+import com.ncccdms.todolistbagian3.ui.screen.task.detail_list.TextDetail
 import com.ncccdms.todolistbagian3.ui.theme.poppBlack
 
 @Composable

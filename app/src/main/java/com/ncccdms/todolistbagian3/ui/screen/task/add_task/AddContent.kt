@@ -31,13 +31,13 @@ import com.ncccdms.todolistbagian3.ui.theme.poppSemiBold
 @Composable
 fun AddContent(
     padding: PaddingValues,
-    addTask: (title: String, deadline: String, statusDesc: String, isFinished: Boolean, pic: String) -> Unit
+    addTask: (title: String, deadline: String, statusDesc: String, pic: String) -> Unit,
+    navigateBack: () -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var pic by remember { mutableStateOf("") }
     var statusDescription by remember { mutableStateOf("") }
     var deadline by remember { mutableStateOf("") }
-    var isFinished by remember { mutableStateOf(false) }
     var isAddClicked by remember { mutableStateOf(false) }
 
     // State untuk pesan kesalahan
@@ -94,22 +94,6 @@ fun AddContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Completed",
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-            Switch(
-                checked = isFinished,
-                onCheckedChange = { isFinished = it }
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         Button(
             onClick = {
                 // Reset error messages
@@ -138,8 +122,9 @@ fun AddContent(
                 }
 
                 if (isValid) {
-                    addTask(title, deadline, statusDescription, isFinished, pic)
+                    addTask(title, deadline, statusDescription, pic)
                     isAddClicked = true
+                    navigateBack()
                 } else {
                     isAddClicked = true
                 }
