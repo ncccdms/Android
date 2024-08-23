@@ -9,12 +9,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ncccdms.todolistbagian3.core.Utils.Companion.sortTasksByDeadline
-import com.ncccdms.todolistbagian3.data.dummy.TaskData
 import com.ncccdms.todolistbagian3.domain.model.Response
 import com.ncccdms.todolistbagian3.domain.repository.Tasks
 import com.ncccdms.todolistbagian3.ui.screen.task.list_task.ListViewModel
@@ -56,8 +54,5 @@ fun MainScreen(
         NextDeadlineSection(sortedTasks.drop(1).take(3), navigateToDetail)
     }
 }
-
-
-
 
 
