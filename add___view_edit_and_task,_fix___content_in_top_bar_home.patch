@@ -1,0 +1,1167 @@
+Subject: [PATCH] add : view edit and task, fix : content in top bar home
+---
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/HomeScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/HomeScreen.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/HomeScreen.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/HomeScreen.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/HomeScreen.kt	(date 1724643148049)
+@@ -5,7 +5,7 @@
+ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.collectAsState
+ import androidx.compose.runtime.getValue
+-import androidx.compose.runtime.mutableStateOf
++import androidx.compose.runtime.mutableFloatStateOf
+ import androidx.compose.runtime.remember
+ import androidx.compose.ui.Modifier
+ import androidx.compose.ui.res.stringResource
+@@ -21,13 +21,17 @@
+ import com.ncccdms.todolistbagian3.components.CostumeTopBar
+ import com.ncccdms.todolistbagian3.nav.Screen.AddScreen
+ import com.ncccdms.todolistbagian3.nav.Screen.DetailListScreen
++import com.ncccdms.todolistbagian3.nav.Screen.EditScreen
+ import com.ncccdms.todolistbagian3.nav.Screen.ListScreen
+ import com.ncccdms.todolistbagian3.nav.Screen.MainScreen
+-import com.ncccdms.todolistbagian3.ui.screen.task.detail_list.DetailScreen
++import com.ncccdms.todolistbagian3.nav.Screen.StatusScreen
+ import com.ncccdms.todolistbagian3.ui.screen.home.components.BottomNavBar
+ import com.ncccdms.todolistbagian3.ui.screen.task.add_task.AddScreen
++import com.ncccdms.todolistbagian3.ui.screen.task.detail_list.DetailScreen
++import com.ncccdms.todolistbagian3.ui.screen.task.edit_task.EditScreen
+ import com.ncccdms.todolistbagian3.ui.screen.task.list_task.ListScreen
+ import com.ncccdms.todolistbagian3.ui.screen.task.main_task.MainScreen
++import com.ncccdms.todolistbagian3.ui.screen.task.status_task.StatusScreen
+ 
+ @Composable
+ fun HomeScreen(
+@@ -36,7 +40,7 @@
+     viewModel: HomeViewModel = hiltViewModel()
+ ) {
+     val username by viewModel.username.collectAsState()
+-    val progress by remember { mutableStateOf(viewModel.progress) }
++    val progress by remember { mutableFloatStateOf(viewModel.progress) }
+     val currentBackStackEntry by navController.currentBackStackEntryAsState()
+     val currentRoute = currentBackStackEntry?.destination?.route
+ 
+@@ -55,8 +59,8 @@
+             )
+         },
+         bottomBar = {
+-            // Show BottomNavBar only on MainScreen or ListScreen
+-            if (currentRoute == MainScreen.route || currentRoute == ListScreen.route) {
++            // Show BottomNavBar only on MainScreen or ListScreen or Status Screen
++            if (currentRoute == MainScreen.route || currentRoute == ListScreen.route || currentRoute == StatusScreen.route) {
+                 BottomNavBar(navController)
+             }
+         },
+@@ -79,12 +83,21 @@
+                     navigateToDetail = { listId ->
+                         navController.navigate(DetailListScreen.createRoute(listId))
+                     },
+-                    navigateToAddTask = { navController.navigate(AddScreen.route) }
++                    navigateToAddTask = { navController.navigate(AddScreen.route) },
++                    navigateToEdit = {navController.navigate(EditScreen.route)}
+                 )
++            }
++            composable(StatusScreen.route) {
++                StatusScreen()
+             }
+             composable(route = AddScreen.route) {
+                 AddScreen(
+                     navigateBack = { navController.navigateUp() }
++                )
++            }
++            composable(route = EditScreen.route) {
++                EditScreen(
++                    navigateBack = { navController.navigateUp() }
+                 )
+             }
+             composable(
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddScreen.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddScreen.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddScreen.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddScreen.kt	(date 1724637818431)
+@@ -5,7 +5,6 @@
+ import androidx.compose.foundation.layout.calculateStartPadding
+ import androidx.compose.material3.Scaffold
+ import androidx.compose.runtime.Composable
+-import androidx.compose.ui.layout.BeyondBoundsLayout
+ import androidx.compose.ui.platform.LocalContext
+ import androidx.compose.ui.unit.LayoutDirection
+ import androidx.compose.ui.unit.dp
+@@ -19,6 +18,7 @@
+     navigateBack: () -> Unit
+ ) {
+     val context = LocalContext.current
++    val allUsersResponse = viewModel.allUsersResponse
+ 
+     Scaffold(
+         content = { padding ->
+@@ -37,6 +37,7 @@
+                         pic = pic,
+                     )
+                 },
++                allUsersResponse = allUsersResponse,
+                 navigateBack = navigateBack
+             )
+         }
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/components/TaskItem.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/components/TaskItem.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/components/TaskItem.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/components/TaskItem.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/components/TaskItem.kt	(date 1724637818644)
+@@ -37,7 +37,8 @@
+ @Composable
+ fun TaskItem(
+     task: Task,
+-    navigateToDetail: (String) -> Unit
++    navigateToDetail: (String) -> Unit,
++    navigateToEdit: () -> Unit
+ ) {
+     val context = LocalContext.current
+ 
+@@ -112,7 +113,7 @@
+                         fontFamily = poppSemiBold
+                     )
+                 }
+-                IconButton(onClick = { showMessage(context,"Edit Task") }) {
++                IconButton(onClick = { navigateToEdit() }) {
+                     Icon(
+                         painter = painterResource(id = R.drawable.ic_edit),
+                         contentDescription = "Edit Task",
+Index: app/src/main/java/com/ncccdms/todolistbagian3/data/TaskRepositoryImpl.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/data/TaskRepositoryImpl.kt b/app/src/main/java/com/ncccdms/todolistbagian3/data/TaskRepositoryImpl.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/data/TaskRepositoryImpl.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/data/TaskRepositoryImpl.kt	(date 1724433837586)
+@@ -22,7 +22,7 @@
+     private val firestore: FirebaseFirestore
+ ): TasksRepository {
+     override fun getTasksFromFirestore(userId: String) = callbackFlow {
+-        val tasksRef = firestore.collection("users").document(userId).collection("tasks")
++        val tasksRef = firestore.collection("tasks")
+         val snapshotListener = tasksRef.orderBy("createAt").addSnapshotListener { snapshot, e ->
+             val tasksResponse = if (snapshot != null) {
+                 val tasks = snapshot.toObjects(Task::class.java)
+@@ -39,24 +39,12 @@
+ 
+     override suspend fun addTaskToFirestore(userId: String, task: Task): AddTaskResponse {
+         return try {
+-            // Reference to the user's tasks subcollection
+-            val tasksRef = firestore.collection("users").document(userId).collection("tasks")
+-
+-            // Set the current date in the desired format
++            val tasksRef = firestore.collection("tasks")
++            val id = tasksRef.document().id
+             val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
+             val currentDate = dateFormat.format(Date())
+-
+-            // Create task without the ID
+-            val taskWithDate = task.copy(createAt = currentDate)
+-
+-            // Add the task to Firestore and retrieve the document reference
+-            val documentRef = tasksRef.add(taskWithDate).await()
+-
+-            // Update the task with the Firestore-generated document ID
+-            val updatedTask = taskWithDate.copy(id = documentRef.id)
+-
+-            // Write the updated task back to Firestore using the document reference
+-            tasksRef.document(documentRef.id).set(updatedTask).await()
++            val taskWithDate = task.copy(id = id, createAt = currentDate)
++            tasksRef.document(id).set(taskWithDate).await()
+ 
+             Success(true)
+         } catch (e: Exception) {
+@@ -65,9 +53,9 @@
+     }
+ 
+ 
+-    override suspend fun deleteTaskFromFirestore(userId: String, taskId: String): DeleteTaskResponse {
++    override suspend fun deleteTaskFromFirestore(taskId: String): DeleteTaskResponse {
+         return try {
+-            val taskRef = firestore.collection("users").document(userId).collection("tasks").document(taskId)
++            val taskRef = firestore.collection("tasks").document(taskId)
+             taskRef.delete().await()
+             Success(true)
+         } catch (e: Exception) {
+@@ -75,9 +63,9 @@
+         }
+     }
+ 
+-    override suspend fun updateTaskInFirestore(userId: String, task: Task): UpdateTaskResponse {
++    override suspend fun updateTaskInFirestore(task: Task): UpdateTaskResponse {
+         return try {
+-            val taskRef = firestore.collection("users").document(userId).collection("tasks").document(task.id)
++            val taskRef = firestore.collection("tasks").document(task.id)
+             taskRef.set(task).await()
+             Success(true)
+         } catch (e: Exception) {
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.gitignore b/.gitignore
+--- a/.gitignore	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/.gitignore	(date 1724643820945)
+@@ -12,4 +12,14 @@
+ /captures
+ .externalNativeBuild
+ .cxx
+-local.properties
+\ No newline at end of file
++local.properties
++
++# Keystore files
++*.jks
++*.keystore
++
++# Google Services (e.g. APIs or Firebase)
++google-services.json
++
++# Android Profiling
++*.hprof
+\ No newline at end of file
+Index: .idea/other.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/other.xml b/.idea/other.xml
+--- a/.idea/other.xml	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/.idea/other.xml	(date 1724507878439)
+@@ -70,6 +70,28 @@
+           <option name="screenY" value="2400" />
+         </PersistentDeviceSelectionData>
+         <PersistentDeviceSelectionData>
++          <option name="api" value="34" />
++          <option name="brand" value="google" />
++          <option name="codename" value="caiman" />
++          <option name="id" value="caiman" />
++          <option name="manufacturer" value="Google" />
++          <option name="name" value="Pixel 9 Pro" />
++          <option name="screenDensity" value="360" />
++          <option name="screenX" value="960" />
++          <option name="screenY" value="2142" />
++        </PersistentDeviceSelectionData>
++        <PersistentDeviceSelectionData>
++          <option name="api" value="34" />
++          <option name="brand" value="google" />
++          <option name="codename" value="comet" />
++          <option name="id" value="comet" />
++          <option name="manufacturer" value="Google" />
++          <option name="name" value="Pixel 9 Pro Fold" />
++          <option name="screenDensity" value="390" />
++          <option name="screenX" value="2076" />
++          <option name="screenY" value="2152" />
++        </PersistentDeviceSelectionData>
++        <PersistentDeviceSelectionData>
+           <option name="api" value="29" />
+           <option name="brand" value="samsung" />
+           <option name="codename" value="crownqlteue" />
+@@ -147,6 +169,17 @@
+           <option name="screenY" value="1600" />
+         </PersistentDeviceSelectionData>
+         <PersistentDeviceSelectionData>
++          <option name="api" value="34" />
++          <option name="brand" value="google" />
++          <option name="codename" value="komodo" />
++          <option name="id" value="komodo" />
++          <option name="manufacturer" value="Google" />
++          <option name="name" value="Pixel 9 Pro XL" />
++          <option name="screenDensity" value="360" />
++          <option name="screenX" value="1008" />
++          <option name="screenY" value="2244" />
++        </PersistentDeviceSelectionData>
++        <PersistentDeviceSelectionData>
+           <option name="api" value="33" />
+           <option name="brand" value="google" />
+           <option name="codename" value="lynx" />
+@@ -234,6 +267,17 @@
+           <option name="screenDensity" value="320" />
+           <option name="screenX" value="1600" />
+           <option name="screenY" value="2560" />
++        </PersistentDeviceSelectionData>
++        <PersistentDeviceSelectionData>
++          <option name="api" value="34" />
++          <option name="brand" value="google" />
++          <option name="codename" value="tokay" />
++          <option name="id" value="tokay" />
++          <option name="manufacturer" value="Google" />
++          <option name="name" value="Pixel 9" />
++          <option name="screenDensity" value="420" />
++          <option name="screenX" value="1080" />
++          <option name="screenY" value="2424" />
+         </PersistentDeviceSelectionData>
+         <PersistentDeviceSelectionData>
+           <option name="api" value="29" />
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/components/BottomNavBar.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/components/BottomNavBar.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/components/BottomNavBar.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/components/BottomNavBar.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/home/components/BottomNavBar.kt	(date 1724639407067)
+@@ -21,8 +21,10 @@
+ import androidx.navigation.compose.currentBackStackEntryAsState
+ import com.ncccdms.todolistbagian3.R
+ import com.ncccdms.todolistbagian3.nav.NavigationItem
++import com.ncccdms.todolistbagian3.nav.Screen
+ import com.ncccdms.todolistbagian3.nav.Screen.ListScreen
+ import com.ncccdms.todolistbagian3.nav.Screen.MainScreen
++import com.ncccdms.todolistbagian3.nav.Screen.StatusScreen
+ import com.ncccdms.todolistbagian3.ui.theme.Blue40
+ import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
+ 
+@@ -41,6 +43,11 @@
+             title = stringResource(R.string.menu_list),
+             icon = R.drawable.list,
+             screen = ListScreen
++        ),
++        NavigationItem(
++            title = stringResource(R.string.menu_task),
++            icon = R.drawable.ic_task,
++            screen = StatusScreen
+         )
+     )
+ 
+Index: app/src/main/java/com/ncccdms/todolistbagian3/core/Constant.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/core/Constant.kt b/app/src/main/java/com/ncccdms/todolistbagian3/core/Constant.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/core/Constant.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/core/Constant.kt	(date 1724643325937)
+@@ -8,6 +8,8 @@
+     const val SIGN_IN_BUTTON = "Sign in"
+     const val RESET_PASSWORD_BUTTON = "Reset"
+     const val SIGN_UP_BUTTON = "Sign up"
++    const val EDIT_BUTTON = "Edit"
++    const val ADD_UP_BUTTON = "Add"
+ 
+     //Menu Items
+     const val SIGN_OUT_ITEM = "Sign out"
+@@ -22,7 +24,9 @@
+     const val VERIFY_EMAIL_SCREEN = "Verify email"
+     const val HOME_SCREEN = "Home"
+     const val MAIN_SCREEN = "Main"
++    const val STATUS_SCREEN = "Status"
+     const val ADD_SCREEN = "Add"
++    const val EDIT_SCREEN = "Edit"
+     const val LIST_SCREEN = "List"
+     const val DETAIL_SCREEN = "Detail List"
+ 
+@@ -30,6 +34,12 @@
+     const val EMAIL_LABEL = "Email"
+     const val USERNAME_LABEL = "Username"
+     const val PASSWORD_LABEL = "Password"
++    const val DESC_TASK_LABEL = "Deskripsi Tugas"
++    const val DESC_STATUS_LABEL = "Deskripsi Status"
++    const val DESC_TASK_BLANK_LABEL = "Deskripsi Tugas tidak boleh kosong"
++    const val DESC_PIC_BLANK_LABEL = "PIC tidak boleh kosong"
++    const val DESC_STATUS_BLANK_LABEL = "Deskripsi Status tidak boleh kosong"
++    const val DESC_DATE_BLANK_LABEL = "Tanggal tenggat tidak boleh kosong"
+ 
+     //Request
+     const val CHANNEL_ID = "task_deadline_channel"
+Index: app/src/main/java/com/ncccdms/todolistbagian3/nav/Screen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/nav/Screen.kt b/app/src/main/java/com/ncccdms/todolistbagian3/nav/Screen.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/nav/Screen.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/nav/Screen.kt	(date 1724639171784)
+@@ -2,6 +2,7 @@
+ 
+ import com.ncccdms.todolistbagian3.core.Constant.ADD_SCREEN
+ import com.ncccdms.todolistbagian3.core.Constant.DETAIL_SCREEN
++import com.ncccdms.todolistbagian3.core.Constant.EDIT_SCREEN
+ import com.ncccdms.todolistbagian3.core.Constant.FORGOT_PASSWORD_SCREEN
+ import com.ncccdms.todolistbagian3.core.Constant.HOME_SCREEN
+ import com.ncccdms.todolistbagian3.core.Constant.LIST_SCREEN
+@@ -10,6 +11,7 @@
+ import com.ncccdms.todolistbagian3.core.Constant.SIGN_IN_SCREEN
+ import com.ncccdms.todolistbagian3.core.Constant.SIGN_UP_SCREEN
+ import com.ncccdms.todolistbagian3.core.Constant.SPLASH_SCREEN
++import com.ncccdms.todolistbagian3.core.Constant.STATUS_SCREEN
+ import com.ncccdms.todolistbagian3.core.Constant.VERIFY_EMAIL_SCREEN
+ 
+ sealed class Screen(val route:String) {
+@@ -21,8 +23,10 @@
+     object VerifyEmailScreen: Screen(VERIFY_EMAIL_SCREEN)
+     object HomeScreen: Screen(HOME_SCREEN)
+     object MainScreen: Screen(MAIN_SCREEN)
++    object StatusScreen: Screen(STATUS_SCREEN)
+     object ListScreen: Screen(LIST_SCREEN)
+     object AddScreen: Screen(ADD_SCREEN)
++    object EditScreen: Screen(EDIT_SCREEN)
+     object DetailListScreen : Screen(DETAIL_SCREEN) {
+         fun createRoute(listId: String) = "detail/$listId"
+     }
+Index: app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/TasksRepository.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/TasksRepository.kt b/app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/TasksRepository.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/TasksRepository.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/TasksRepository.kt	(date 1724430985127)
+@@ -15,7 +15,7 @@
+ 
+     suspend fun addTaskToFirestore(userId: String, task: Task): AddTaskResponse
+ 
+-    suspend fun deleteTaskFromFirestore(userId: String, taskId: String): DeleteTaskResponse
++    suspend fun deleteTaskFromFirestore(taskId: String): DeleteTaskResponse
+ 
+-    suspend fun updateTaskInFirestore(userId: String, task: Task): UpdateTaskResponse
++    suspend fun updateTaskInFirestore(task: Task): UpdateTaskResponse
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/DeleteTask.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/DeleteTask.kt b/app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/DeleteTask.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/DeleteTask.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/DeleteTask.kt	(date 1724431942405)
+@@ -6,7 +6,6 @@
+     private val repo: TasksRepository
+ ) {
+     suspend operator fun invoke(
+-        userId: String,
+         taskId: String
+-    ) = repo.deleteTaskFromFirestore(userId, taskId)
++    ) = repo.deleteTaskFromFirestore(taskId)
+ }
+Index: app/src/main/java/com/ncccdms/todolistbagian3/components/CostumeTopBar.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/components/CostumeTopBar.kt b/app/src/main/java/com/ncccdms/todolistbagian3/components/CostumeTopBar.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/components/CostumeTopBar.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/components/CostumeTopBar.kt	(date 1724642166829)
+@@ -8,6 +8,8 @@
+ import androidx.compose.foundation.layout.fillMaxWidth
+ import androidx.compose.foundation.layout.padding
+ import androidx.compose.foundation.shape.RoundedCornerShape
++import androidx.compose.material3.Card
++import androidx.compose.material3.CardDefaults
+ import androidx.compose.material3.DropdownMenu
+ import androidx.compose.material3.DropdownMenuItem
+ import androidx.compose.material3.ExperimentalMaterial3Api
+@@ -51,10 +53,11 @@
+ ) {
+     var openMenu by remember { mutableStateOf(false) }
+ 
+-    Column(
++    Card(
+         modifier = Modifier
+-            .fillMaxWidth()
+-            .background(Blue40)
++            .fillMaxWidth(),
++        shape = RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp),
++        colors = CardDefaults.cardColors(Blue40)
+     ) {
+         TopAppBar(
+             title = {
+Index: app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/UpdateTask.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/UpdateTask.kt b/app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/UpdateTask.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/UpdateTask.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/domain/use_case/UpdateTask.kt	(date 1724431942354)
+@@ -7,7 +7,6 @@
+     private val repo: TasksRepository
+ ) {
+     suspend operator fun invoke(
+-        userId: String,
+         task: Task
+-    ) = repo.updateTaskInFirestore(userId, task)
++    ) = repo.updateTaskInFirestore(task)
+ }
+Index: app/src/main/java/com/ncccdms/todolistbagian3/domain/model/Task.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/domain/model/Task.kt b/app/src/main/java/com/ncccdms/todolistbagian3/domain/model/Task.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/domain/model/Task.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/domain/model/Task.kt	(date 1724515199580)
+@@ -5,8 +5,8 @@
+ import java.time.temporal.ChronoUnit
+ 
+ data class User(
+-    val id:String,
+-    val username:String
++    val id:String = "",
++    val username:String = ""
+ )
+ 
+ data class Task(
+Index: app/src/main/java/com/ncccdms/todolistbagian3/components/UsernameField.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/components/UsernameField.kt b/app/src/main/java/com/ncccdms/todolistbagian3/components/UsernameField.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/components/UsernameField.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/components/UsernameField.kt	(date 1724417891808)
+@@ -1,0 +1,84 @@
++package com.ncccdms.todolistbagian3.components
++
++import androidx.compose.foundation.background
++import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.padding
++import androidx.compose.foundation.text.KeyboardOptions
++import androidx.compose.material3.ExperimentalMaterial3Api
++import androidx.compose.material3.MaterialTheme
++import androidx.compose.material3.OutlinedTextField
++import androidx.compose.material3.Text
++import androidx.compose.material3.TextFieldDefaults
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.LaunchedEffect
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.focus.FocusRequester
++import androidx.compose.ui.focus.focusRequester
++import androidx.compose.ui.graphics.Color
++import androidx.compose.ui.text.input.KeyboardType
++import androidx.compose.ui.text.input.TextFieldValue
++import androidx.compose.ui.unit.dp
++import com.ncccdms.todolistbagian3.core.Constant.EMAIL_LABEL
++import com.ncccdms.todolistbagian3.core.Constant.USERNAME_LABEL
++import com.ncccdms.todolistbagian3.ui.theme.Blue40
++import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
++import com.ncccdms.todolistbagian3.ui.theme.poppMedium
++import kotlinx.coroutines.job
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun UsernameField(
++    username: TextFieldValue,
++    onEmailValueChange: (newValue: TextFieldValue) -> Unit,
++    isError: Boolean,
++) {
++    val focusRequester = FocusRequester()
++
++    OutlinedTextField(
++        value = username,
++        isError = isError,
++        onValueChange = { newValue ->
++            onEmailValueChange(newValue)
++
++        },
++        label = {
++            Text(
++                text = USERNAME_LABEL,
++                fontFamily = poppMedium,
++                color = if (isError) MaterialTheme.colorScheme.error else BlueDark40
++            )
++        },
++        placeholder = {
++            Text(
++                text = "Enter your username",
++                color = BlueDark40
++            )
++        },
++        colors = TextFieldDefaults.outlinedTextFieldColors(
++            focusedPlaceholderColor = BlueDark40,
++            unfocusedPlaceholderColor = Blue40,
++            focusedLabelColor = BlueDark40,
++            unfocusedLabelColor = Blue40,
++            containerColor = Color.White, // Change this to your desired background color
++            focusedBorderColor = BlueDark40,
++            unfocusedBorderColor = Blue40
++        ),
++        singleLine = true,
++        keyboardOptions = KeyboardOptions(
++            keyboardType = KeyboardType.Text
++        ),
++        modifier = Modifier
++            .focusRequester(focusRequester)
++            .background(Color.White)
++            .fillMaxWidth()
++            .padding(horizontal = 16.dp)// Adjust background color as needed
++        ,
++    )
++
++    LaunchedEffect(Unit) {
++        coroutineContext.job.invokeOnCompletion {
++            focusRequester.requestFocus()
++        }
++    }
++}
++
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListScreen.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListScreen.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListScreen.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListScreen.kt	(date 1724637818607)
+@@ -25,7 +25,8 @@
+ fun ListScreen(
+     viewModel: ListViewModel = hiltViewModel(),
+     navigateToDetail: (String) -> Unit,
+-    navigateToAddTask: () -> Unit
++    navigateToAddTask: () -> Unit,
++    navigateToEdit: () -> Unit
+ ) {
+     Scaffold(
+         floatingActionButton = {
+@@ -54,7 +55,7 @@
+                 }
+                 if (viewModel.ongoingExpanded) {
+                     items(viewModel.ongoingTasks) { task ->
+-                        TaskItem(task = task, navigateToDetail = navigateToDetail)
++                        TaskItem(task = task, navigateToDetail = navigateToDetail, navigateToEdit = navigateToEdit)
+                         Spacer(modifier = Modifier.height(8.dp))
+                     }
+                 }
+@@ -69,7 +70,7 @@
+                 }
+                 if (viewModel.deadlineExpanded) {
+                     items(viewModel.deadlineTasks) { task ->
+-                        TaskItem(task = task, navigateToDetail = navigateToDetail)
++                        TaskItem(task = task, navigateToDetail = navigateToDetail, navigateToEdit = navigateToEdit)
+                         Spacer(modifier = Modifier.height(8.dp))
+                     }
+                 }
+@@ -84,7 +85,7 @@
+                 }
+                 if (viewModel.finishedExpanded) {
+                     items(viewModel.finishedTasks) { task ->
+-                        TaskItem(task = task, navigateToDetail = navigateToDetail)
++                        TaskItem(task = task, navigateToDetail = navigateToDetail, navigateToEdit = navigateToEdit)
+                         Spacer(modifier = Modifier.height(8.dp))
+                     }
+                 }
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddContent.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddContent.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddContent.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddContent.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddContent.kt	(date 1724637818651)
+@@ -1,9 +1,7 @@
+ package com.ncccdms.todolistbagian3.ui.screen.task.add_task
+ 
+-import androidx.compose.foundation.layout.Arrangement
+ import androidx.compose.foundation.layout.Column
+ import androidx.compose.foundation.layout.PaddingValues
+-import androidx.compose.foundation.layout.Row
+ import androidx.compose.foundation.layout.Spacer
+ import androidx.compose.foundation.layout.fillMaxSize
+ import androidx.compose.foundation.layout.fillMaxWidth
+@@ -12,7 +10,6 @@
+ import androidx.compose.foundation.shape.RoundedCornerShape
+ import androidx.compose.material3.Button
+ import androidx.compose.material3.ButtonDefaults
+-import androidx.compose.material3.Switch
+ import androidx.compose.material3.Text
+ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.getValue
+@@ -25,6 +22,9 @@
+ import androidx.compose.ui.unit.sp
+ import com.ncccdms.todolistbagian3.components.AddField
+ import com.ncccdms.todolistbagian3.components.DatePickerDocked
++import com.ncccdms.todolistbagian3.components.PicField
++import com.ncccdms.todolistbagian3.domain.model.Response
++import com.ncccdms.todolistbagian3.domain.model.User
+ import com.ncccdms.todolistbagian3.ui.theme.Blue40
+ import com.ncccdms.todolistbagian3.ui.theme.poppSemiBold
+ 
+@@ -32,13 +32,15 @@
+ fun AddContent(
+     padding: PaddingValues,
+     addTask: (title: String, deadline: String, statusDesc: String, pic: String) -> Unit,
+-    navigateBack: () -> Unit
++    navigateBack: () -> Unit,
++    allUsersResponse: Response<List<User>>,
+ ) {
+     var title by remember { mutableStateOf("") }
+     var pic by remember { mutableStateOf("") }
+     var statusDescription by remember { mutableStateOf("") }
+     var deadline by remember { mutableStateOf("") }
+     var isAddClicked by remember { mutableStateOf(false) }
++    var expanded by remember { mutableStateOf(false) }
+ 
+     // State untuk pesan kesalahan
+     var titleError by remember { mutableStateOf("") }
+@@ -62,14 +64,23 @@
+ 
+         Spacer(modifier = Modifier.height(8.dp))
+ 
+-        AddField(
+-            value = pic,
+-            onValueChange = { pic = it },
+-            label = "PIC",
+-            isError = isAddClicked && picError.isNotEmpty(),
+-            errorMessage = picError,
+-            modifier = Modifier.fillMaxWidth()
+-        )
++        when (allUsersResponse) {
++            is Response.Success -> {
++                val allUsers = allUsersResponse.data
++                PicField(
++                    value = pic,
++                    onValueChange = { pic = it },
++                    label = "PIC",
++                    isError = isAddClicked && picError.isNotEmpty(),
++                    errorMessage = picError,
++                    expanded = expanded,
++                    onExpandedChange = { expanded = it },
++                    users = allUsers
++                )
++            }
++            is Response.Loading -> Response.Loading
++            is Response.Failure -> Text("Error: ${allUsersResponse.e.message}")
++        }
+ 
+         Spacer(modifier = Modifier.height(8.dp))
+ 
+Index: app/src/main/java/com/ncccdms/todolistbagian3/components/DatePickerDocked.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/components/DatePickerDocked.kt b/app/src/main/java/com/ncccdms/todolistbagian3/components/DatePickerDocked.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/components/DatePickerDocked.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/components/DatePickerDocked.kt	(date 1724520606601)
+@@ -41,7 +41,7 @@
+     var showDatePicker by remember { mutableStateOf(false) }
+     val datePickerState = rememberDatePickerState()
+ 
+-    // Mengambil tanggal yang dipilih dari datePickerState
++    // Extract selected date from datePickerState
+     val selectedDate by remember {
+         derivedStateOf {
+             datePickerState.selectedDateMillis?.let {
+@@ -100,7 +100,8 @@
+             }
+         }
+ 
+-        if (isError) {
++        // Only show error message if it's not empty
++        if (isError && errorMessage.isNotEmpty()) {
+             Text(
+                 text = errorMessage,
+                 color = Color.Red,
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddTask.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddTask.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddTask.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddTask.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/add_task/AddTask.kt	(date 1724519140851)
+@@ -8,20 +8,21 @@
+ import com.ncccdms.todolistbagian3.domain.model.Response.Loading
+ import com.ncccdms.todolistbagian3.domain.model.Response.Success
+ import com.ncccdms.todolistbagian3.ui.screen.sign_in.SignInViewModel
++import com.ncccdms.todolistbagian3.ui.screen.task.TaskViewModel
+ 
+ @Composable
+-fun AddTask(
+-    viewModel: SignInViewModel = hiltViewModel(),
+-    showErrorMessage: (errorMessage: String?) -> Unit
+-) {
+-    when (val signInResponse = viewModel.signInResponse) {
+-        is Loading -> ProgressBar()
+-        is Success -> Unit
+-        is Failure -> signInResponse.apply {
+-            LaunchedEffect(e) {
+-                print(e)
+-                showErrorMessage(e.message)
+-            }
+-        }
+-    }
+-}
+\ No newline at end of file
++    fun AddTask(
++        viewModel: TaskViewModel = hiltViewModel(),
++        showErrorMessage: (errorMessage: String?) -> Unit
++    ) {
++        when (val signInResponse = viewModel.addTaskResponse) {
++            is Loading -> Loading
++            is Success -> Unit
++            is Failure -> signInResponse.apply {
++                LaunchedEffect(e) {
++                    print(e)
++                    showErrorMessage(e.message)
++                }
++            }
++        }
++    }
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+--- a/app/src/main/res/values/strings.xml	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/res/values/strings.xml	(date 1724638246512)
+@@ -2,6 +2,7 @@
+     <string name="app_name">Todo-List</string>
+     <string name="menu_home">Home</string>
+     <string name="menu_list">List</string>
++    <string name="menu_task">Task</string>
+     <string name="title_home">Your Progress Schedule</string>
+     <string name="title_copyright">©2024 Diskominfo</string>
+     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel semper lorem. Maecenas sit amet risus non neque ornare maximus. Mauris et suscipit enim, sed vehicula massa.</string>
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListViewModel.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListViewModel.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListViewModel.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/list_task/ListViewModel.kt	(date 1724639900937)
+@@ -66,6 +66,7 @@
+         }
+     }
+ 
++
+     fun toggleOngoingExpanded() {
+         ongoingExpanded = !ongoingExpanded
+     }
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+--- a/.idea/inspectionProfiles/Project_Default.xml	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/.idea/inspectionProfiles/Project_Default.xml	(date 1724640016960)
+@@ -3,30 +3,39 @@
+     <option name="myName" value="Project Default" />
+     <inspection_tool class="PreviewAnnotationInFunctionWithParameters" enabled="true" level="ERROR" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+     <inspection_tool class="PreviewApiLevelMustBeValid" enabled="true" level="ERROR" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+     <inspection_tool class="PreviewDimensionRespectsLimit" enabled="true" level="WARNING" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+     <inspection_tool class="PreviewFontScaleMustBeGreaterThanZero" enabled="true" level="ERROR" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+     <inspection_tool class="PreviewMultipleParameterProviders" enabled="true" level="ERROR" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+     <inspection_tool class="PreviewMustBeTopLevelFunction" enabled="true" level="ERROR" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+     <inspection_tool class="PreviewNeedsComposableAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+     <inspection_tool class="PreviewNotSupportedInUnitTestFiles" enabled="true" level="ERROR" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+     <inspection_tool class="PreviewPickerAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
+       <option name="composableFile" value="true" />
++      <option name="previewFile" value="true" />
+     </inspection_tool>
+   </profile>
+ </component>
+\ No newline at end of file
+Index: app/src/main/java/com/ncccdms/todolistbagian3/data/AuthRepositoryImpl.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/data/AuthRepositoryImpl.kt b/app/src/main/java/com/ncccdms/todolistbagian3/data/AuthRepositoryImpl.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/data/AuthRepositoryImpl.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/data/AuthRepositoryImpl.kt	(date 1724513329548)
+@@ -7,8 +7,10 @@
+ import com.google.firebase.firestore.FirebaseFirestore
+ import com.ncccdms.todolistbagian3.domain.model.Response.Success
+ import com.ncccdms.todolistbagian3.domain.model.Response.Failure
++import com.ncccdms.todolistbagian3.domain.model.User
+ import com.ncccdms.todolistbagian3.domain.repository.AuthRepository
+ import com.ncccdms.todolistbagian3.domain.repository.SignUpResponse
++import com.ncccdms.todolistbagian3.domain.repository.getAllUserResponse
+ import com.ncccdms.todolistbagian3.domain.repository.getUsernameResponse
+ import com.ncccdms.todolistbagian3.domain.repository.saveUserDetailsResponse
+ import kotlinx.coroutines.CoroutineScope
+@@ -44,6 +46,16 @@
+             Failure(e)
+         }
+     }
++
++    override suspend fun getAllUser(): getAllUserResponse {
++        return try {
++            val snapshot = firestore.collection("users").get().await()
++            val users = snapshot.toObjects(User::class.java)
++            Success(users)
++        } catch (e: Exception) {
++            Failure(e)
++        }
++    }
+ 
+     override suspend fun saveUserDetails(userId: String, username: String): saveUserDetailsResponse {
+         return try {
+Index: app/src/main/java/com/ncccdms/todolistbagian3/components/AddField.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/components/AddField.kt b/app/src/main/java/com/ncccdms/todolistbagian3/components/AddField.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/components/AddField.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/components/AddField.kt	(date 1724520104602)
+@@ -14,6 +14,8 @@
+ import androidx.compose.ui.unit.sp
+ import com.ncccdms.todolistbagian3.ui.theme.Blue40
+ import com.ncccdms.todolistbagian3.ui.theme.BlueDark40
++import com.ncccdms.todolistbagian3.ui.theme.poppMedium
++import com.ncccdms.todolistbagian3.ui.theme.poppSemiBold
+ 
+ @OptIn(ExperimentalMaterial3Api::class)
+ @Composable
+@@ -31,7 +33,7 @@
+         OutlinedTextField(
+             value = value,
+             onValueChange = onValueChange,
+-            label = { Text(text = label) },
++            label = { Text(text = label, fontFamily = poppSemiBold) },
+             isError = isError,
+             readOnly = readOnly,
+             trailingIcon = trailingIcon,
+@@ -51,6 +53,7 @@
+                 text = errorMessage,
+                 color = Color.Red,
+                 fontSize = 12.sp,
++                fontFamily = poppMedium,
+                 modifier = Modifier.padding(top = 4.dp)
+             )
+         }
+Index: app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/TaskViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/TaskViewModel.kt b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/TaskViewModel.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/TaskViewModel.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/ui/screen/task/TaskViewModel.kt	(date 1724518496351)
+@@ -12,8 +12,8 @@
+ import com.ncccdms.todolistbagian3.domain.repository.AddTaskResponse
+ import com.ncccdms.todolistbagian3.domain.repository.AuthRepository
+ import com.ncccdms.todolistbagian3.domain.repository.DeleteTaskResponse
+-import com.ncccdms.todolistbagian3.domain.repository.TasksResponse
+ import com.ncccdms.todolistbagian3.domain.repository.UpdateTaskResponse
++import com.ncccdms.todolistbagian3.domain.repository.getAllUserResponse
+ import com.ncccdms.todolistbagian3.domain.use_case.TaskUseCases
+ import dagger.hilt.android.lifecycle.HiltViewModel
+ import kotlinx.coroutines.launch
+@@ -31,6 +31,17 @@
+         private set
+     var updateTaskResponse by mutableStateOf<UpdateTaskResponse>(Success(false))
+         private set
++    var allUsersResponse by mutableStateOf<getAllUserResponse>(Loading)
++        private set
++    var isAddingTask by mutableStateOf(false)
++
++    init {
++        getAllUsers()
++    }
++
++    private fun getAllUsers() = viewModelScope.launch {
++        allUsersResponse = authRepository.getAllUser()
++    }
+ 
+     fun addTask(
+         title: String,
+@@ -38,60 +49,44 @@
+         statusDesc: String,
+         pic: String
+     ) = viewModelScope.launch {
+-        val userId = authRepository.currentUser?.uid // Get the current user ID
++        val userId = authRepository.currentUser?.uid
+         if (userId != null) {
+-            addTaskResponse = Loading // Set loading state
++            isAddingTask = true // Set loading state to true
+ 
+             try {
+-                // Retrieve the username for the current user
+-                when (val usernameResponse = authRepository.getUsername(userId)) {
+-                    is Success -> {
+-                        val username = usernameResponse.data
+-
+-                        val task = Task(
+-                            id = "", // Initially empty, will be filled later
+-                            title = title,
+-                            deadline = deadline,
+-                            statusDesc = statusDesc,
+-                            isFinished = false,
+-                            creator = username,
+-                            createAt = "", // This will be set when adding to Firestore
+-                            pic = pic
+-                        )
+-
+-                        // Add task and get the result
+-                        when (val response = useCases.addTask(userId, task)) {
+-                            is Success -> {
+-                                addTaskResponse = Success(true)
+-                            }
+-                            is Failure -> {
+-                                addTaskResponse = Failure(response.e)
+-                            }
+-                            Loading -> addTaskResponse = Loading
+-                        }
+-                    }
+-                    is Failure -> {
+-                        addTaskResponse = Failure(usernameResponse.e)
+-                    }
+-                    is Loading -> {
+-                        // Handle loading state if needed
+-                        addTaskResponse = Loading
+-                    }
++                val usernameResponse = authRepository.getUsername(userId)
++                if (usernameResponse is Success) {
++                    val username = usernameResponse.data
++                    val task = Task(
++                        id = "",
++                        title = title,
++                        deadline = deadline,
++                        statusDesc = statusDesc,
++                        isFinished = false,
++                        creator = username,
++                        createAt = "",
++                        pic = pic
++                    )
++                    addTaskResponse = useCases.addTask(userId, task)
++                } else {
++                    addTaskResponse = Failure(Exception("Failed to retrieve username"))
+                 }
+             } catch (e: Exception) {
+                 addTaskResponse = Failure(e)
++            } finally {
++                isAddingTask = false // Reset loading state
+             }
+         } else {
+             addTaskResponse = Failure(Exception("User ID is null"))
++            isAddingTask = false
+         }
+     }
+-
+ 
+     fun deleteTask(taskId: String) = viewModelScope.launch {
+-        val userId = authRepository.currentUser?.uid // Get the current user ID
++        val userId = authRepository.currentUser?.uid
+         if (userId != null) {
+-            deleteTaskResponse = Loading // Set loading state
+-            deleteTaskResponse = useCases.deleteTask(userId, taskId)
++            deleteTaskResponse = Loading
++            deleteTaskResponse = useCases.deleteTask(taskId)
+         } else {
+             deleteTaskResponse = Failure(Exception("User ID is null"))
+         }
+@@ -105,22 +100,31 @@
+         isFinished: Boolean,
+         pic: String
+     ) = viewModelScope.launch {
+-        val userId = authRepository.currentUser?.uid // Get the current user ID
++        val userId = authRepository.currentUser?.uid
+         if (userId != null) {
+-            updateTaskResponse = Loading // Set loading state
+-            updateTaskResponse = useCases.updateTask(
+-                userId = userId,
+-                task = Task(
+-                    id = taskId,
+-                    title = title,
+-                    deadline = deadline,
+-                    statusDesc = statusDesc,
+-                    isFinished = isFinished,
+-                    creator = userId, // Assuming the creator is the current user
+-                    createAt = "", // This could be updated as needed
+-                    pic = pic
+-                )
+-            )
++            try {
++                val usernameResponse = authRepository.getUsername(userId)
++                if (usernameResponse is Success) {
++                    val username = usernameResponse.data
++                    updateTaskResponse = Loading
++                    updateTaskResponse = useCases.updateTask(
++                        task = Task(
++                            id = taskId,
++                            title = title,
++                            deadline = deadline,
++                            statusDesc = statusDesc,
++                            isFinished = isFinished,
++                            creator = username,  // Use username as the creator
++                            createAt = "",  // Optionally update this field if necessary
++                            pic = pic
++                        )
++                    )
++                } else {
++                    updateTaskResponse = Failure(Exception("Failed to retrieve username"))
++                }
++            } catch (e: Exception) {
++                updateTaskResponse = Failure(e)
++            }
+         } else {
+             updateTaskResponse = Failure(Exception("User ID is null"))
+         }
+Index: app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/AuthRepository.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/AuthRepository.kt b/app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/AuthRepository.kt
+--- a/app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/AuthRepository.kt	(revision 9a5eee384893b1a02bed4146cb8617ac77d09790)
++++ b/app/src/main/java/com/ncccdms/todolistbagian3/domain/repository/AuthRepository.kt	(date 1724510536211)
+@@ -2,6 +2,7 @@
+ 
+ import com.google.firebase.auth.FirebaseUser
+ import com.ncccdms.todolistbagian3.domain.model.Response
++import com.ncccdms.todolistbagian3.domain.model.User
+ import kotlinx.coroutines.CoroutineScope
+ import kotlinx.coroutines.flow.StateFlow
+ 
+@@ -14,6 +15,7 @@
+ typealias AuthStateResponse = StateFlow<Boolean>
+ typealias saveUserDetailsResponse = Response<Boolean>
+ typealias getUsernameResponse = Response<String>
++typealias getAllUserResponse = Response<List<User>>
+ 
+ interface AuthRepository {
+     val currentUser:FirebaseUser?
+@@ -37,4 +39,6 @@
+     suspend fun saveUserDetails(userId: String, username: String): saveUserDetailsResponse
+ 
+     suspend fun getUsername(userId: String): getUsernameResponse
++
++    suspend fun getAllUser(): getAllUserResponse
+ }
+\ No newline at end of file
