@@ -29,9 +29,10 @@ Displays a summary of task categories and a call to action to view all tasks.
 ### 3. Task List Screen
 View all tasks that are accessible to the user, with options to filter, sort, and search.
 
-<img src="https://github.com/user-attachments/assets/a37f0305-33d2-4b22-a662-954a39a1680f" alt="Home Screen" width="359" />
+<img width="359" alt="List" src="https://github.com/user-attachments/assets/95e91204-6f2a-4c88-a592-38f56a345e2d">
 
 ---
+
 
 ### 4. User List Screen
 See a list of users, which allows assigning tasks to specific individuals.
@@ -39,6 +40,7 @@ See a list of users, which allows assigning tasks to specific individuals.
 <img src="https://github.com/user-attachments/assets/170d11e4-46ab-4311-82a6-c68acbe5e6c1" alt="User List" width="359" />
 
 ---
+
 
 ### 5. Add Task Screen
 Create a new task with title, description, and other relevant details.
@@ -50,7 +52,7 @@ Create a new task with title, description, and other relevant details.
 ### 6. Task Detail Screen
 View detailed information about a specific task, including its status, priority, and the user it is assigned to.
 
-<img src="https://github.com/user-attachments/assets/052ea0a4-1626-4b95-a034-22aef0deeeed" alt="Add Task" width="359" />
+<img width="359" alt="Detail Skejul" src="https://github.com/user-attachments/assets/d79fb38a-51bc-4dc0-9d76-f4b37d31b6f1">
 
 ---
 
