@@ -29,7 +29,7 @@ Displays a summary of task categories and a call to action to view all tasks.
 ### 3. Task List Screen
 View all tasks that are accessible to the user, with options to filter, sort, and search.
 
-![Task List](https://github.com/user-attachments/assets/a37f0305-33d2-4b22-a662-954a39a1680f)
+<img src="https://github.com/user-attachments/assets/a37f0305-33d2-4b22-a662-954a39a1680f" alt="Home Screen" width="359" />
 
 ---
 
@@ -50,7 +50,7 @@ Create a new task with title, description, and other relevant details.
 ### 6. Task Detail Screen
 View detailed information about a specific task, including its status, priority, and the user it is assigned to.
 
-![Task Details](https://github.com/user-attachments/assets/052ea0a4-1626-4b95-a034-22aef0deeeed)
+<img src="https://github.com/user-attachments/assets/052ea0a4-1626-4b95-a034-22aef0deeeed" alt="Add Task" width="359" />
 
 ---
 
