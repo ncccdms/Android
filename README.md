@@ -22,7 +22,7 @@ Users authenticate by providing login credentials before accessing the app's fun
 ### 2. Home Screen
 Displays a summary of task categories and a call to action to view all tasks.
 
-<img src="https://github.com/user-attachments/assets/538f3763-8a12-4109-940f-034eb3b62bfe" alt="Home Screen" width="359" />
+![Home Screen](https://github.com/user-attachments/assets/538f3763-8a12-4109-940f-034eb3b62bfe)
 
 ---
 
@@ -36,14 +36,14 @@ View all tasks that are accessible to the user, with options to filter, sort, an
 ### 4. User List Screen
 See a list of users, which allows assigning tasks to specific individuals.
 
-<img src="https://github.com/user-attachments/assets/170d11e4-46ab-4311-82a6-c68acbe5e6c1" alt="User List" width="359" />
+![User List](https://github.com/user-attachments/assets/170d11e4-46ab-4311-82a6-c68acbe5e6c1)
 
 ---
 
 ### 5. Add Task Screen
 Create a new task with title, description, and other relevant details.
 
-<img src="https://github.com/user-attachments/assets/c4a58e4b-8cea-4617-84d5-8c151ce3b0c7" alt="Add Task" width="359" />
+![Add Task](https://github.com/user-attachments/assets/c4a58e4b-8cea-4617-84d5-8c151ce3b0c7)
 
 ---
 
